@@ -1,0 +1,12 @@
+Commandline start for Harry:
+C:\"Program Files"\"MongoDB 2.6 Standard"\bin\mongod.exe --dbpath d:\git\mongodb\data
+
+
+Common:
+C:\"Program Files"\"MongoDB 2.6 Standard"\bin\mongod.exe --dbpath ||PATH TO GIT REPO ENDING IN \mongodb\data!||
+
+
+
+
+SQL :: MongoDB Comparison
+http://docs.mongodb.org/manual/reference/sql-comparison/
