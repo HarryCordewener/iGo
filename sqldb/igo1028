@@ -1,0 +1,305 @@
+CREATE DATABASE  IF NOT EXISTS `igo` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `igo`;
+-- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
+--
+-- Host: localhost    Database: igo
+-- ------------------------------------------------------
+-- Server version	5.5.16
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `events`
+--
+
+DROP TABLE IF EXISTS `events`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `events` (
+  `EventID` int(11) NOT NULL AUTO_INCREMENT,
+  `EventName` varchar(255) NOT NULL,
+  `EventStartTime` datetime NOT NULL,
+  `EventEndTime` datetime NOT NULL,
+  `EventStatus` varchar(255) NOT NULL,
+  PRIMARY KEY (`EventID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `events`
+--
+
+LOCK TABLES `events` WRITE;
+/*!40000 ALTER TABLE `events` DISABLE KEYS */;
+/*!40000 ALTER TABLE `events` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `eventsatlocation`
+--
+
+DROP TABLE IF EXISTS `eventsatlocation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `eventsatlocation` (
+  `LocationID` int(11) NOT NULL,
+  `EventID` int(11) NOT NULL,
+  PRIMARY KEY (`LocationID`,`EventID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `eventsatlocation`
+--
+
+LOCK TABLES `eventsatlocation` WRITE;
+/*!40000 ALTER TABLE `eventsatlocation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `eventsatlocation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `friendship`
+--
+
+DROP TABLE IF EXISTS `friendship`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `friendship` (
+  `UserID` int(11) NOT NULL,
+  `FriendUserID` int(11) NOT NULL,
+  PRIMARY KEY (`UserID`,`FriendUserID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `friendship`
+--
+
+LOCK TABLES `friendship` WRITE;
+/*!40000 ALTER TABLE `friendship` DISABLE KEYS */;
+/*!40000 ALTER TABLE `friendship` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hospitals`
+--
+
+DROP TABLE IF EXISTS `hospitals`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hospitals` (
+  `hospitalid` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) DEFAULT NULL,
+  `type` varchar(45) DEFAULT NULL,
+  `gps` varchar(45) DEFAULT NULL,
+  `active` tinyint(4) DEFAULT '1',
+  `locationID` int(11) DEFAULT NULL,
+  `contactnumber` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`hospitalid`),
+  UNIQUE KEY `locationID_UNIQUE` (`locationID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hospitals`
+--
+
+LOCK TABLES `hospitals` WRITE;
+/*!40000 ALTER TABLE `hospitals` DISABLE KEYS */;
+INSERT INTO `hospitals` VALUES (1,'Advocate','Emergency','41.907841, -87.648342',1,2,'123-222-2222'),(2,'Rush','Default','41.874792, -87.668898',1,3,'222-222-2222');
+/*!40000 ALTER TABLE `hospitals` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `locations`
+--
+
+DROP TABLE IF EXISTS `locations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locations` (
+  `LocationID` int(11) NOT NULL AUTO_INCREMENT,
+  `LocationName` varchar(255) NOT NULL,
+  `GPS` varchar(65) NOT NULL,
+  `LocationType` varchar(255) NOT NULL,
+  `SubType` varchar(255) NOT NULL,
+  `Active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`LocationID`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `locations`
+--
+
+LOCK TABLES `locations` WRITE;
+/*!40000 ALTER TABLE `locations` DISABLE KEYS */;
+INSERT INTO `locations` VALUES (1,'Chicago','41.836944, -87.684722','City','',1);
+/*!40000 ALTER TABLE `locations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `locationtovisit`
+--
+
+DROP TABLE IF EXISTS `locationtovisit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `locationtovisit` (
+  `UserID` int(11) NOT NULL,
+  `LocationID` int(11) NOT NULL,
+  `StartDate` datetime NOT NULL,
+  `EndDate` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `locationtovisit`
+--
+
+LOCK TABLES `locationtovisit` WRITE;
+/*!40000 ALTER TABLE `locationtovisit` DISABLE KEYS */;
+/*!40000 ALTER TABLE `locationtovisit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reviewfor`
+--
+
+DROP TABLE IF EXISTS `reviewfor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reviewfor` (
+  `ReviewID` int(11) NOT NULL,
+  `LocationID` int(11) NOT NULL,
+  PRIMARY KEY (`ReviewID`,`LocationID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reviewfor`
+--
+
+LOCK TABLES `reviewfor` WRITE;
+/*!40000 ALTER TABLE `reviewfor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reviewfor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `reviews`
+--
+
+DROP TABLE IF EXISTS `reviews`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `reviews` (
+  `ReviewID` int(11) NOT NULL AUTO_INCREMENT,
+  `Rating` int(11) NOT NULL,
+  `UserID` int(11) NOT NULL,
+  `Comments` text NOT NULL,
+  `Date` datetime NOT NULL,
+  PRIMARY KEY (`ReviewID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `reviews`
+--
+
+LOCK TABLES `reviews` WRITE;
+/*!40000 ALTER TABLE `reviews` DISABLE KEYS */;
+/*!40000 ALTER TABLE `reviews` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rssfeeds`
+--
+
+DROP TABLE IF EXISTS `rssfeeds`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rssfeeds` (
+  `LocationID` int(11) NOT NULL,
+  `URL` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rssfeeds`
+--
+
+LOCK TABLES `rssfeeds` WRITE;
+/*!40000 ALTER TABLE `rssfeeds` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rssfeeds` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `UserID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL,
+  `Email` varchar(255) NOT NULL,
+  `MobileNumber` varchar(255) NOT NULL,
+  `Password` varchar(32) NOT NULL,
+  PRIMARY KEY (`UserID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (1,'Shouvik','abc@example.com','555-555-5555','igo'),(2,'Testuser','abc2@example.com','554-444-4444','igo');
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `visitationlog`
+--
+
+DROP TABLE IF EXISTS `visitationlog`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `visitationlog` (
+  `UserID` int(11) NOT NULL,
+  `LocationID` int(11) NOT NULL,
+  `Occurrences` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`UserID`,`LocationID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `visitationlog`
+--
+
+LOCK TABLES `visitationlog` WRITE;
+/*!40000 ALTER TABLE `visitationlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `visitationlog` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2014-10-28 16:11:59
