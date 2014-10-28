@@ -1,6 +1,10 @@
+
+
 package remote;
 
+
 import java.rmi.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /*
@@ -10,16 +14,23 @@ import java.util.ArrayList;
  */
 public interface happyPathInterface extends Remote{
 
-void recieveMessage(String x);
+	void recieveMessage(String x)throws RemoteException;
 	
 
-	void addAccount();
+	void addAccount(String username, String password, String email, String mobileNumber)throws RemoteException, ClassNotFoundException, SQLException;
+	void displayFriendMenu(int db) throws RemoteException, ClassNotFoundException, SQLException;
+	void addFriend(int userid, int friendid) throws RemoteException, ClassNotFoundException, SQLException; //Must add friend and apply to BOTH databases!
 	
-	void validateLogin (String user, String pass)throws RemoteException;
-	void setDatabaseType(int selection)throws RemoteException;
-	void setLocation (String loc)throws RemoteException;//input a city
+	int validateLogin (String user, String pass)throws RemoteException, ClassNotFoundException, SQLException;
+	//Validate login only verifies using SQL
+	//if validateLogin returns 0, login was unsuccessuful, do not show menu,
+	//otherwise validatelogin will return the userID (int) which can be used to add other friends
 	
-	void seeResteraunts()throws RemoteException;
-	void seeHospitals()throws RemoteException;
+	int setLocation (String city, String state, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//input a city
+	
+	int getUsernamefromEmail(String email) throws RemoteException, ClassNotFoundException, SQLException;
+	
+	String seeResteraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
+	String seeHospitals(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 
 }

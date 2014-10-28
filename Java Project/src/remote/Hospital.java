@@ -1,13 +1,13 @@
 package remote;
 
 
-public class Hospital extends location{
+public class Hospital extends locationSuper{
 
-	String hospitalID;
+	int hospitalID;
 	String hospitalType;
 	String contactNumber;
 
-	public Hospital(String co, String name, String id, String hospID, String hospType, String contact) {
+	public Hospital(String co, String name, int id, int hospID, String hospType, String contact) {
 		super(co, name, id);
 		hospitalID= hospID;
 		hospitalType = hospType;
@@ -15,11 +15,11 @@ public class Hospital extends location{
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getHospitalID() {
+	public int getHospitalID() {
 		return hospitalID;
 	}
 
-	public void setHospitalID(String hospitalID) {
+	public void setHospitalID(int hospitalID) {
 		this.hospitalID = hospitalID;
 	}
 
@@ -56,6 +56,11 @@ public class Hospital extends location{
 	 * 
 	 * 
 	 */
+
+	public String toString(){
+		return "{\"coordinates\":" + coordinates + ", \"locationID\":" + locID + ", \"name\":" + name + ", \"type\":" + hospitalType + 
+				". \"contactNumber\":" + contactNumber + "}";
+	}
 
 
 }
