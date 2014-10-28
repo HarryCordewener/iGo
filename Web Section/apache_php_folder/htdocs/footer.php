@@ -22,3 +22,10 @@
 
   </body>
 </html>
+
+<!--
+    Used in the making of this website:
+    Bootstrap.
+    Google Maps API.
+    PHP Login Minimal: https://github.com/panique/php-login-minimal/
+-->
