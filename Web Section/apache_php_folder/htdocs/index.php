@@ -2,8 +2,8 @@
 
       <!-- Main hero unit for a primary marketing message or call to action -->
       <div class="hero-unit">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+        <h1>iGo! Where will you go?</h1>
+        <p>Welcome to iGo. This is just filler text.</p>
         <p><a href="#" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
       </div>
 
