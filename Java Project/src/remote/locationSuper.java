@@ -1,8 +1,11 @@
 package remote;
+/*LocationSuper:
+ * This class is a superclass for all location types, it holds the primary attributes for display on our frontend
+ */
 
 public abstract class locationSuper {
 
-	String coordinates;
+	String coordinates;//gps coordinates
 	int locID;
 	String name;
 	

@@ -1,5 +1,8 @@
 package remote;
-
+/*
+ * LocationToVisit:
+ * stores data related to a user's desired destination
+ */
 
 
 public class LocationToVisit extends locationSuper {

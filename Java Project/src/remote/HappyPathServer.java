@@ -1,4 +1,12 @@
-
+/*
+ * iGO
+ * CS 442 Project
+ * 
+ * The happypath server implements a simplified version of our full interface, the happyPathInterface
+ * 
+ * This server has basic functionality relating to creating accounts, validating logins, adding/viewing friends,
+ * setting the city to search in, and searching for restraunts or hospitals in a city.
+ */
 package remote;
 
 import java.rmi.*;
@@ -102,7 +110,10 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		}
 	}
 
-
+/*Validate login will check the database to match up the users provided username and password and provide the client
+ * with the users id if successful, otherwise it will return a zero(non-Javadoc)
+ * @see remote.happyPathInterface#validateLogin(java.lang.String, java.lang.String)
+ */
 	@Override
 	public int validateLogin(String user, String pass)throws RemoteException, ClassNotFoundException, SQLException {
 
@@ -132,6 +143,11 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		return 0;
 
 	}
+	
+	/*closeConnection - this is used to sever a client connection to mySQL
+	 * 
+	 * 
+	 */
 
 	private static void closeConnection(Statement stmt, Connection conn,
 			ResultSet rs) throws SQLException {
@@ -141,6 +157,11 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	}
 
 
+	/*setLocation:
+	 * This method is used to lookup a location id in our database and return to the cleint
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#setLocation(java.lang.String, java.lang.String, boolean)
+	 */
 
 	@Override
 	public int setLocation(String loc, String state, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException{
@@ -186,6 +207,13 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		}
 		return 0;
 	}
+	
+	/*
+	 * seeRestraunts:
+	 * This method returns a JSON list of restraunts in the selected location
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#seeResteraunts(int, boolean)
+	 */
 
 	@Override
 	public String seeResteraunts(int locationid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException {
@@ -220,6 +248,12 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 	}
 
+	/*
+	 * AddAccount:
+	 * This method adds a new user with credentials to our database
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#addAccount(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public void addAccount(String username, String password, String email, String mobile) throws RemoteException, ClassNotFoundException, SQLException{
 
@@ -236,16 +270,30 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 	}
 
+	/*
+	 * queryMySQL:
+	 * This method executes a query and returns the result set in an object
+	 */
 	private ResultSet queryMySQL(Statement stmt, String query) throws SQLException {
 		String sql=query;
 		ResultSet rs = stmt.executeQuery(sql);
 		return rs;
 	}
+	
 
+	/*
+	 * insertMySQL:
+	 * This method is used to execute insertion queries
+	 */
 	private void insertMySQL(Statement stmt, String query) throws SQLException {
 		String sql=query;
 		stmt.executeQuery(sql);
 	}
+	
+	/*
+	 * connectMySQL:
+	 * This method is used to connect to an instance of mySQL with hardcoded connection credentials and schema name
+	 */
 
 	private Connection connectMySQL() throws ClassNotFoundException,
 	SQLException {
@@ -285,6 +333,12 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	}
 
 
+	/*
+	 * recieveMessage:
+	 * test RMI method
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#recieveMessage(java.lang.String)
+	 */
 
 	@Override
 	public void recieveMessage(String x) throws RemoteException {
@@ -294,16 +348,29 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 
 
+	/*displayFriendMenu:
+	 * This method displays users in our database and their ids for the client to add friends
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#displayFriendMenu(int)
+	 */
 	@Override
 	public void displayFriendMenu(int db) throws RemoteException {
 
 	}
 
+	/*
+	 * addFriend:
+	 * This method adds a friendship relationship to the database
+	 * (non-Javadoc)
+	 * @see remote.happyPathInterface#addFriend(int, int)
+	 */
 	@Override
 	public void addFriend(int userid, int friendid) throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 	@Override
 	public int getUsernamefromEmail(String email) throws RemoteException {
@@ -344,6 +411,13 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		return hospitalsJSON.toString();
 
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void displayMyFriends(int userid) throws RemoteException,
+			ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		
 	}
 
 
