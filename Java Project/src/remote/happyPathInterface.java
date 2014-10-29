@@ -36,5 +36,7 @@ public interface happyPathInterface extends Remote{
 	
 	String seeHospitals(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a lsit of hospitals with all attributes in JSON
+	
+	void Logout()throws RemoteException, ClassNotFoundException, SQLException;;
 
 }
