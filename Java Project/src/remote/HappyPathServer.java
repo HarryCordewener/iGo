@@ -115,8 +115,9 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
  * @see remote.happyPathInterface#validateLogin(java.lang.String, java.lang.String)
  */
 	@Override
-	public int validateLogin(String user, String pass)throws RemoteException, ClassNotFoundException, SQLException {
+	public int validateLogin(String user, String pass, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException {
 
+		if (!nosql){
 		Statement stmt;
 		boolean found = false;
 		Connection conn = connectMySQL();
@@ -142,6 +143,12 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		return 0;
 
+		}
+		else{
+			
+			//mongodb validation here
+			return 0;
+		}
 	}
 	
 	/*closeConnection - this is used to sever a client connection to mySQL
@@ -152,6 +159,13 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	private static void closeConnection(Statement stmt, Connection conn,
 			ResultSet rs) throws SQLException {
 		rs.close();
+		stmt.close();
+		conn.close();
+	}
+	
+	private static void closeConnection(Statement stmt, Connection conn
+			) throws SQLException {
+		
 		stmt.close();
 		conn.close();
 	}
@@ -267,6 +281,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		System.out.println("Creating statement- adding user");
 		stmt = conn.createStatement();
 		insertMySQL(stmt, query);
+		closeConnection(stmt, conn);
 
 	}
 

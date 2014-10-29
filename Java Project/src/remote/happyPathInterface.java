@@ -21,7 +21,7 @@ public interface happyPathInterface extends Remote{
 	void displayMyFriends (int userid)throws RemoteException, ClassNotFoundException, SQLException;//displays user's friends
 	void addFriend(int userid, int friendid) throws RemoteException, ClassNotFoundException, SQLException; //Must add friend and apply to BOTH databases!
 	
-	int validateLogin (String user, String pass)throws RemoteException, ClassNotFoundException, SQLException;//checks username and password 
+	int validateLogin (String user, String pass, boolean db)throws RemoteException, ClassNotFoundException, SQLException;//checks username and password 
 	//int getMongoUserID(String user);
 	//Validate login only verifies using SQL
 	//if validateLogin returns 0, login was unsuccessuful, do not show menu,
