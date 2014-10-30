@@ -58,8 +58,8 @@ public class Hospital extends locationSuper{
 	 */
 
 	public String toString(){
-		return "{\"coordinates\":" + coordinates + ", \"locationID\":" + locID + ", \"name\":" + name + ", \"type\":" + hospitalType + 
-				". \"contactNumber\":" + contactNumber + "}";
+		return " {\"hospitalid\":" + hospitalID +",\"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":" + name + ", \"type\":" + hospitalType + 
+				", \"contactnumber\":" + contactNumber + "}";
 	}
 
 

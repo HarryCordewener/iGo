@@ -1,4 +1,5 @@
 package remote;
+
 import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -37,6 +38,7 @@ public class HappyPathClient {
             	else
             		if(loginChoice == 1)
             		{
+            			
             			int loginToken = validateLogin(stub, dbMenu);
             			if(loginToken == 0)
             			{
@@ -76,9 +78,10 @@ public class HappyPathClient {
             System.out.println("2. Hospitals\n");
             ch = input.nextInt();
             
-            if(ch == 1)
+            if(ch == 2)
             {
             	response = stub.seeHospitals(itemId, dbMenu);
+            	System.out.print(response);
             	final JSONObject obj = new JSONObject(response);
                 final JSONArray hosdata = obj.getJSONArray("Hospitals");
                 final int n = hosdata.length();
@@ -86,28 +89,29 @@ public class HappyPathClient {
                 System.out.println("\nWe found "+n+" hospitals:\n");
                 for (int i = 0; i < n; ++i) {
                     final JSONObject restraunt = hosdata.getJSONObject(i);
-                    System.out.println(restraunt.getString("restrauntid"));
+                    System.out.println(restraunt.getInt("hospitalid"));
                     System.out.println(restraunt.getString("name"));
                     System.out.println(restraunt.getString("type"));
                     System.out.println(restraunt.getString("gps")+"\n");
+                    System.out.println(restraunt.getString("contactnumber")+"\n");
                   }
             }
             else
-            	if(ch == 2)
+            	if(ch == 1)
             	{
-            		response = stub.seeResteraunts(itemId, dbMenu);
+            		response = stub.seeRestauraunts(itemId, dbMenu);
             		final JSONObject obj = new JSONObject(response);
-                    final JSONArray resdata = obj.getJSONArray("Restraunts");
+                    final JSONArray resdata = obj.getJSONArray("Restaurants");
                     final int n = resdata.length();
                     
                     System.out.println("\nWe found "+n+" restaurents:\n");
                     for (int i = 0; i < n; ++i) {
                         final JSONObject restraunt = resdata.getJSONObject(i);
-                        System.out.println(restraunt.getString("hospitalid"));
+                        System.out.println(restraunt.getInt("restaurantid"));
                         System.out.println(restraunt.getString("name"));
                         System.out.println(restraunt.getString("type"));
                         System.out.println(restraunt.getString("gps")+"\n");
-                        System.out.println(restraunt.getString("contactnumber")+"\n");
+                       
                        
                       }
             	}
@@ -150,8 +154,12 @@ public class HappyPathClient {
 		
 		try
 		{
+		//System.out.print(stub.seeHospitals(1, false));
 		 loginToken = stub.validateLogin(username, password, db);
-		 return loginToken;
+		 
+		 
+		
+         return loginToken;
 		}
 		catch(Exception e)
 		{

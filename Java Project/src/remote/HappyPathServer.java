@@ -29,7 +29,7 @@ public class HappyPathServer extends
 java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 	int dbselection =1;
-	static Connection conn;
+	 //static Connection conn;
 
 	public HappyPathServer() throws RemoteException{
 
@@ -67,21 +67,41 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			serverPort = 12345;
 		}
 
-		createServer();
+		HappyPathServer server = createServer();
 		connectRMI(serverPort);
+		
+		System.out.println("Rmi connected");
+	
+		/*
+		try {
+			System.out.print(server.seeResteraunts(1,false));
+			System.out.print(server.seeHospitals(1,false));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
 
 	}
 
 
 
-	public static void createServer() {
+	public static HappyPathServer createServer() {
 		try{
 			HappyPathServer server = new HappyPathServer();
+			return server;
 		}
 		catch (Exception e){
 			e.printStackTrace();
 			System.exit(1);
 		}
+		return null;
+		
 	}
 
 	public static void connectRMI(int serverPort) {
@@ -105,11 +125,14 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			//ReceiveMessageInterface stub = (ReceiveMessageInterface) UnicastRemoteObject.exportObject(obj, 0);
 			registry = LocateRegistry.createRegistry(port);
 			registry.rebind("rmiServer", obj);
+			//System.out.println("RMI connected");
 
 		}
 		catch(RemoteException e){
 			System.out.println("remote exception"+ e);
 		}
+		
+		//System.out.println("RMI connected");
 	}
 
 	/*Validate login will check the database to match up the users provided username and password and provide the client
@@ -121,43 +144,35 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		if (!nosql){
 
-			try {
-				conn = connectMySQL();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			Statement stmt;
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
 			boolean found = false;
 
 			String query = "SELECT * FROM users where  Name= '" +user  + "' limit 1;";
 
 			//STEP 4: Execute a query
 			System.out.println("Creating statement- checking password...");
-			stmt = conn.createStatement();
 			ResultSet rs = queryMySQL(stmt, query);
 
 			while(rs.next()){
 				//Retrieve by column name
 				int id  = rs.getInt("userID");
-				String username = rs.getString("username");
+				String username = rs.getString("Name");
 				String password = rs.getString("password");
 				if (pass.equals(password)){
 					found = true;
 					closeResults(stmt, rs);
 
+					System.out.println("User" + id + " logged in");
 					return id;
 				}
 			}
 			closeResults(stmt, rs);
 
 			if (!found){
-				closeConnection(conn);
+				closeConnection(con);
 			}
+			System.out.println("User" + 0 + " logged in");
 			return 0;
 
 		}
@@ -205,13 +220,13 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	public int setLocation(String loc, String state, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException{
 
 		if (!nosql){
-			Statement stmt;
-			Connection conn = connectMySQL();
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
+		//	Connection conn = connectMySQL(c);
 			String query = "SELECT * FROM locations where LocationName='" + loc + "' limit 1;";
 
 			//STEP 4: Execute a query
 			System.out.println("Creating statement- lookin up city...");
-			stmt = conn.createStatement();
 			ResultSet rs = queryMySQL(stmt, query);
 
 			while(rs.next()){
@@ -225,7 +240,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 			//STEP 4: Execute a query
 			System.out.println("City Not Found- looking up state...");
-			stmt = conn.createStatement();
+			stmt = con.createStatement();
 			ResultSet rs2 = queryMySQL(stmt, query2);
 
 			while(rs.next()){
@@ -254,18 +269,21 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 */
 
 	@Override
-	public String seeResteraunts(int locationid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException {
+	public String seeRestauraunts(int locationid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException {
+
+	
+		Connection con = connectSQL();
+		Statement stmt = con.createStatement ();
 
 
-		Statement stmt;
-		StringBuilder restrauntsJSON = null;
-		restrauntsJSON.append("Restraunts [");
+		StringBuilder restaurantsJSON = new StringBuilder(1000);
+		restaurantsJSON.append("{ Restaurants:[");
 		//	Connection conn = connectMySQL();
 		String query = "SELECT * FROM restaurants where locationid = " + locationid + " limit 100;";
 
 		//STEP 4: Execute a query
 		System.out.println("Creating statement- querying resteraunts...");
-		stmt = conn.createStatement();
+		//stmt = conn.createStatement();
 		ResultSet rs = queryMySQL(stmt, query);
 		while(rs.next()){
 
@@ -273,18 +291,39 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			String name = rs.getString("name");
 			String type = rs.getString("type");
 			String gps = rs.getString("gps");
-			restraunt temp = new restraunt(gps, name, locationid, restid, type);
-			restrauntsJSON.append(temp.toString());
+			Restaurant temp = new Restaurant(gps, name, locationid, restid, type);
+			restaurantsJSON.append(temp.toString());
 			//(String co, String name, int id, int restID, String restType) 
 
+			if(rs.last()){
+				break;
+				}
+				restaurantsJSON.append(",");
 		}
 
 		//	closeConnection(stmt, conn, rs);
 		closeResults(stmt, rs);
-		restrauntsJSON.append("]");
+		restaurantsJSON.append("]}");
+		closeConnection(con);
 
-		return restrauntsJSON.toString();
+		return restaurantsJSON.toString();
 
+	}
+
+	private Connection connectSQL() throws ClassNotFoundException, SQLException {
+		try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		java.sql.Connection con;
+		con = DriverManager.getConnection
+		("jdbc:mysql://localhost/igo", "root", "");
+		return con;
 	}
 
 	/*
@@ -296,7 +335,9 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	@Override
 	public void addAccount(String username, String password, String email, String mobile) throws RemoteException, ClassNotFoundException, SQLException{
 
-		Statement stmt;
+		Connection con = connectSQL();
+		Statement stmt = con.createStatement ();
+		
 		boolean found = false;
 		//Connection conn = connectMySQL();
 		String query = "INSERT INTO users ( `Name`, `Email`, `MobileNumber`, `Password`) VALUES ('"+ username +"', '"+ email +"', '"+ mobile + "', '"+password +"');";
@@ -304,9 +345,9 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		//STEP 4: Execute a query
 		System.out.println("Creating statement- adding user");
-		stmt = conn.createStatement();
 		insertMySQL(stmt, query);
 		closeInsertion(stmt);
+		closeConnection(con);
 
 	}
 
@@ -335,11 +376,10 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 * This method is used to connect to an instance of mySQL with hardcoded connection credentials and schema name
 	 */
 
-	private static Connection connectMySQL() throws ClassNotFoundException,
+	private void connectMySQL(Connection conn) throws ClassNotFoundException,
 	SQLException {
 		String conURL= "jdbc:mysql://localhost:3306/igo";
 		int conPort= 3306;
-		Connection conn = null;
 		Statement stmt = null;
 		try{
 			//STEP 2: Register JDBC driver
@@ -348,6 +388,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			//STEP 3: Open a connection
 			System.out.println("Connecting to database...");
 			conn = DriverManager.getConnection(conURL,"root","");
+			System.out.print("connected");
 		}
 		catch(SQLException se){
 			//Handle errors for JDBC
@@ -369,7 +410,8 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 				se.printStackTrace();
 			}//end finally try
 		}//end try
-		return conn;
+		//System.out.println("SQL Connected");
+		
 	}
 
 
@@ -422,15 +464,18 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	public String seeHospitals(int locationid, boolean nosql)
 			throws RemoteException, ClassNotFoundException, SQLException {
 
-		Statement stmt;
-		StringBuilder hospitalsJSON = null;
-		hospitalsJSON.append("Hospitals [");
-		//Connection conn = connectMySQL();
+		Connection con = connectSQL();
+		Statement stmt = con.createStatement ();
+		
+		StringBuilder hospitalsJSON= new StringBuilder(1000);
+		hospitalsJSON.append("{Hospitals: [");
+		//Connection conn = null;
+		//connectMySQL(conn);
 		String query = "SELECT * FROM hospitals where locationid = " + locationid + " limit 100;";
 
 		//STEP 4: Execute a query
 		System.out.println("Creating statement- querying resteraunts...");
-		stmt = conn.createStatement();
+		//stmt = conn.createStatement();
 		ResultSet rs = queryMySQL(stmt, query);
 		while(rs.next()){
 
@@ -441,14 +486,19 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			String contact = rs.getString("contactnumber");
 			Hospital temp = new Hospital(gps, name, locationid, restid, type, contact);
 			hospitalsJSON.append(temp.toString());
+			if(rs.last()){
+			break;
+			}
+			hospitalsJSON.append(",");
 			//(String co, String name, int id, int restID, String restType) 
 
 		}
 
 		//closeConnection(stmt, conn, rs);
 		closeResults(stmt, rs);
-		hospitalsJSON.append("]");
+		hospitalsJSON.append("]}");
 
+		closeConnection(con);
 		return hospitalsJSON.toString();
 
 		// TODO Auto-generated method stub
@@ -462,10 +512,10 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	}
 
 	@Override
-	public void Logout() throws RemoteException, ClassNotFoundException,
+	public void Logout(int userid) throws RemoteException, ClassNotFoundException,
 	SQLException {
 		// TODO Auto-generated method stub
-		closeConnection(conn);
+		
 
 	}
 

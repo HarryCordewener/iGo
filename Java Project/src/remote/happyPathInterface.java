@@ -31,12 +31,12 @@ public interface happyPathInterface extends Remote{
 	
 	int getUsernamefromEmail(String email) throws RemoteException, ClassNotFoundException, SQLException;
 	
-	String seeResteraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
+	String seeRestauraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a lsit of restraunts with all attributes in JSON
 	
 	String seeHospitals(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a lsit of hospitals with all attributes in JSON
 	
-	void Logout()throws RemoteException, ClassNotFoundException, SQLException;;
+	void Logout(int userid)throws RemoteException, ClassNotFoundException, SQLException;;
 
 }
