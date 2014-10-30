@@ -368,7 +368,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 */
 	private void insertMySQL(Statement stmt, String query) throws SQLException {
 		String sql=query;
-		stmt.executeQuery(sql);
+		stmt.executeUpdate(sql);
 	}
 
 	/*
