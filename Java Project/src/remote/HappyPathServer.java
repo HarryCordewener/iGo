@@ -29,7 +29,7 @@ public class HappyPathServer extends
 java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 	int dbselection =1;
-	 //static Connection conn;
+	//static Connection conn;
 
 	public HappyPathServer() throws RemoteException{
 
@@ -69,9 +69,9 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		HappyPathServer server = createServer();
 		connectRMI(serverPort);
-		
+
 		System.out.println("Rmi connected");
-	
+
 		/*
 		try {
 			System.out.print(server.seeResteraunts(1,false));
@@ -101,7 +101,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			System.exit(1);
 		}
 		return null;
-		
+
 	}
 
 	public static void connectRMI(int serverPort) {
@@ -131,7 +131,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		catch(RemoteException e){
 			System.out.println("remote exception"+ e);
 		}
-		
+
 		//System.out.println("RMI connected");
 	}
 
@@ -222,7 +222,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		if (!nosql){
 			Connection con = connectSQL();
 			Statement stmt = con.createStatement ();
-		//	Connection conn = connectMySQL(c);
+			//	Connection conn = connectMySQL(c);
 			String query = "SELECT * FROM locations where LocationName='" + loc + "' limit 1;";
 
 			//STEP 4: Execute a query
@@ -271,37 +271,32 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	@Override
 	public String seeRestauraunts(int locationid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException {
 
-	
+
 		Connection con = connectSQL();
 		Statement stmt = con.createStatement ();
 
 
 		StringBuilder restaurantsJSON = new StringBuilder(1000);
 		restaurantsJSON.append("{ Restaurants:[");
-		//	Connection conn = connectMySQL();
 		String query = "SELECT * FROM restaurants where locationid = " + locationid + " limit 100;";
 
 		//STEP 4: Execute a query
 		System.out.println("Creating statement- querying resteraunts...");
 		//stmt = conn.createStatement();
-		ResultSet rs = queryMySQL(stmt, query);
-		while(rs.next()){
+		ResultSet rs = stmt.executeQuery(query);
 
+		while(rs.next()){
 			int restid  = rs.getInt("restrauntid");
 			String name = rs.getString("name");
 			String type = rs.getString("type");
 			String gps = rs.getString("gps");
 			Restaurant temp = new Restaurant(gps, name, locationid, restid, type);
+			System.out.println(temp.toString());
 			restaurantsJSON.append(temp.toString());
-			//(String co, String name, int id, int restID, String restType) 
 
-			if(rs.last()){
-				break;
-				}
-				restaurantsJSON.append(",");
+			restaurantsJSON.append(",");
 		}
-
-		//	closeConnection(stmt, conn, rs);
+		
 		closeResults(stmt, rs);
 		restaurantsJSON.append("]}");
 		closeConnection(con);
@@ -322,7 +317,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		}
 		java.sql.Connection con;
 		con = DriverManager.getConnection
-		("jdbc:mysql://localhost/igo", "root", "");
+				("jdbc:mysql://localhost/igo", "root", "");
 		return con;
 	}
 
@@ -337,7 +332,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		Connection con = connectSQL();
 		Statement stmt = con.createStatement ();
-		
+
 		boolean found = false;
 		//Connection conn = connectMySQL();
 		String query = "INSERT INTO users ( `Name`, `Email`, `MobileNumber`, `Password`) VALUES ('"+ username +"', '"+ email +"', '"+ mobile + "', '"+password +"');";
@@ -411,7 +406,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			}//end finally try
 		}//end try
 		//System.out.println("SQL Connected");
-		
+
 	}
 
 
@@ -466,19 +461,17 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		Connection con = connectSQL();
 		Statement stmt = con.createStatement ();
-		
-		StringBuilder hospitalsJSON= new StringBuilder(1000);
+
+		StringBuilder hospitalsJSON= new StringBuilder(10000);
 		hospitalsJSON.append("{Hospitals: [");
-		//Connection conn = null;
-		//connectMySQL(conn);
-		String query = "SELECT * FROM hospitals where locationid = " + locationid + " limit 100;";
+		String query = "SELECT * FROM hospitals where locationid = " + locationid + ";";
 
 		//STEP 4: Execute a query
 		System.out.println("Creating statement- querying resteraunts...");
-		//stmt = conn.createStatement();
-		ResultSet rs = queryMySQL(stmt, query);
-		while(rs.next()){
 
+		ResultSet rs = stmt.executeQuery(query);
+		int counter=0;
+		while(rs.next()){
 			int restid  = rs.getInt("hospitalid");
 			String name = rs.getString("name");
 			String type = rs.getString("type");
@@ -486,15 +479,9 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			String contact = rs.getString("contactnumber");
 			Hospital temp = new Hospital(gps, name, locationid, restid, type, contact);
 			hospitalsJSON.append(temp.toString());
-			if(rs.last()){
-			break;
-			}
 			hospitalsJSON.append(",");
-			//(String co, String name, int id, int restID, String restType) 
-
 		}
 
-		//closeConnection(stmt, conn, rs);
 		closeResults(stmt, rs);
 		hospitalsJSON.append("]}");
 
@@ -515,7 +502,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	public void Logout(int userid) throws RemoteException, ClassNotFoundException,
 	SQLException {
 		// TODO Auto-generated method stub
-		
+
 
 	}
 
