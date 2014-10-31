@@ -1,0 +1,32 @@
+Run below steps on mysql db:
+
+Truncate table restaurants;
+ALTER TABLE `restaurants` 
+CHANGE COLUMN `restrauntid` `restrauntid` INT(11) NOT NULL AUTO_INCREMENT ;
+
+
+
+
+To Populate Yelp API Data to our tables:
+Run Steps as in YelpAPI.java, Change your db credentials in datainsert.java and FetchData.java
+
+///*Step1
+  private static final String DEFAULT_TERM = "W Taylor St";
+  private static final String Type = "restaurants"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Chicago, IL";
+  //*/
+  /*Step2
+  private static final String DEFAULT_TERM = "Restaurants";
+  private static final String Type = "restaurants"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Houstaon, Tx";
+  */
+  /*Step3
+  private static final String DEFAULT_TERM = "Hospitals";
+  private static final String Type = "hospitals"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Houston, Tx";
+  */
+  /*Step4
+  private static final String DEFAULT_TERM = "Hospitals";
+  private static final String Type = "hospitals"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Chicago,IL";
+  */

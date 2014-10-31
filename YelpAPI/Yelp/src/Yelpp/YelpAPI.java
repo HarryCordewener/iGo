@@ -31,9 +31,28 @@ import com.beust.jcommander.Parameter;
 public class YelpAPI {
 
   private static final String API_HOST = "api.yelp.com";
-  private static final String DEFAULT_TERM = "Restaurant";
+  ///*Step1
+  private static final String DEFAULT_TERM = "W Taylor St";
+  private static final String Type = "restaurants"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
   private static final String DEFAULT_LOCATION = "Chicago, IL";
-  private static final int SEARCH_LIMIT = 1;
+  //*/
+  /*Step2
+  private static final String DEFAULT_TERM = "Restaurants";
+  private static final String Type = "restaurants"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Houstaon, Tx";
+  */
+  /*Step3
+  private static final String DEFAULT_TERM = "Hospitals";
+  private static final String Type = "hospitals"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Houston, Tx";
+  */
+  /*Step4
+  private static final String DEFAULT_TERM = "Hospitals";
+  private static final String Type = "hospitals"; // Just added to tell which table to add. " Just give restaurants (or) hospitals
+  private static final String DEFAULT_LOCATION = "Chicago,IL";
+  */
+  
+  private static final int SEARCH_LIMIT = 20;
   private static final String SEARCH_PATH = "/v2/search";
   private static final String BUSINESS_PATH = "/v2/business";
 
@@ -153,7 +172,7 @@ public class YelpAPI {
     for(int i=0; i < businesses.size(); i++)
     {
     JSONObject firstBusiness = (JSONObject) businesses.get(i);
-    datainsert.add2DB(firstBusiness);
+    datainsert.add2DB(firstBusiness,Type);
     String firstBusinessID = firstBusiness.get("id").toString();
     //System.out.println(String.format(
         //"%s businesses found, querying business info for the top result \"%s\" ...",

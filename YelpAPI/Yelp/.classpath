@@ -20,5 +20,8 @@
 	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/org.json-20120521.jar"/>
 	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/scribe-1.3.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/LOKESH/Downloads/Compressed/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/mongo-2.6.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/mongo-java-driver-2.6.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/mongo-java-driver-2.10.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
