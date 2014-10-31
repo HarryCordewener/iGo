@@ -48,7 +48,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		String mySQLurl="jdbc:mysql://localhost:3306/igo";
 		int mySQLport=3306;
 		String mySQLusername="root";
-		String mySQLpass="";
+		String mySQLpass="cs411";
 
 		//mongodb variables
 		String mongoDBurl;

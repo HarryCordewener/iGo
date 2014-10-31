@@ -3,22 +3,22 @@ package remote;
 
 public class Restaurant extends locationSuper{
 
-	int restauraantID;
+	int restaurantID;
 	String restaurantType;
 
 	public Restaurant(String co, String name, int id, int restID, String restType) {
 		super(co, name, id);
-		restauraantID= restID;
+		restaurantID= restID;
 		restaurantType = restType;
 		
 	}
 
 	public int getrestrauntID() {
-		return restauraantID;
+		return restaurantID;
 	}
 
 	public void setrestrauntID(int restrauntID) {
-		this.restauraantID = restrauntID;
+		this.restaurantID = restrauntID;
 	}
 
 	public String getrestrauntType() {
@@ -31,7 +31,7 @@ public class Restaurant extends locationSuper{
 
 
 	public String toString(){
-		return "{\"restaurantid\":" + restauraantID +  ", \"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":"
+		return "{\"restaurantid\":" + restaurantID +  ", \"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":"
 				+ name + ", \"type\":" + restaurantType +  "}";
 	}
 

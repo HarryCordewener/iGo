@@ -1,4 +1,4 @@
-package remote;
+package local;
 
 import java.net.InetAddress;
 import java.rmi.RemoteException;
@@ -20,7 +20,7 @@ public class HappyPathClient {
         try {
         	boolean dbMenu;
             Registry registry = LocateRegistry.getRegistry(12345);
-            happyPathInterface stub = (happyPathInterface) registry.lookup("rmiServer");
+            remote.happyPathInterface stub = (remote.happyPathInterface) registry.lookup("rmiServer");
             
             welcome();
             
@@ -36,11 +36,11 @@ public class HappyPathClient {
         }
     }
 	
-	private static void login(happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException, JSONException {
+	private static void login(remote.happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException, JSONException {
 
     	int loginChoice;
     	String city = "Chicago", state = "IL";
-		System.out.println("\n1. Exixting users.. Log In");
+		System.out.println("\n1. Existing users.. Log In");
         System.out.println("2. New users.. Sign Up");
         System.out.println("3. Exit");
         loginChoice = input.nextInt();
@@ -55,7 +55,7 @@ public class HappyPathClient {
         			int loginToken = validateLogin(stub, dbMenu);
         			if(loginToken == 0)
         			{
-        				System.out.println("Login falied. Please try again.\n");
+        				System.err.println("Login failed. Please try again.\n");
         			}
         			else
         			{
@@ -70,12 +70,12 @@ public class HappyPathClient {
         			}
         		else
         		{
-        			System.out.println("Wrong Choice.");
+        			System.err.println("Wrong Choice.");
         		}
 		
 	}
 
-	private static void setLocation(happyPathInterface stub, boolean dbMenu, String city, String state) throws RemoteException, ClassNotFoundException, SQLException, JSONException 
+	private static void setLocation(remote.happyPathInterface stub, boolean dbMenu, String city, String state) throws RemoteException, ClassNotFoundException, SQLException, JSONException 
 	{
 		int itemId = 0;
 		int changeLoc = 2;
@@ -181,7 +181,7 @@ public class HappyPathClient {
 		}
 	}
 
-	private static void addAccount(happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException{
+	private static void addAccount(remote.happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException{
 		
 		String username, password, email, mobile; 
 		System.out.println("\n--New Account Creation--");
@@ -202,15 +202,15 @@ public class HappyPathClient {
 		}
 		catch(Exception e)
 		{
-			System.out.println("\nSeems like the Server is Down. Please try after some time. ");
+			System.err.println("\nSeems like the Server is Down. Please try after some time. ");
 		}
 		
 	}
 	
-	private static int validateLogin(happyPathInterface stub, boolean db){
+	private static int validateLogin(remote.happyPathInterface stub, boolean db){
 		String username, password;
 		int loginToken;
-		System.out.println("\n--Exixting User Login--");
+		System.out.println("\n--Existing User Login--");
 		System.out.println("Please enter your Username");
 		username = input.next();
 		System.out.println("Please enter a Password");
@@ -227,7 +227,7 @@ public class HappyPathClient {
 		}
 		catch(Exception e)
 		{
-			System.out.println("\nSeems like the Server is Down. Please try after some time. ");
+			System.err.println("\nSeems like the Server is Down. Please try after some time. ");
 			e.printStackTrace();
 			return 0;
 		}
@@ -237,8 +237,7 @@ public class HappyPathClient {
 		// TODO Auto-generated method stub
 		
 		int choiceDB;
-		System.out.println("");
-		System.out.println("Please choose a DataBase that you want to access:");
+		System.out.println("\nPlease choose a DataBase that you want to access:");
 		System.out.println("1. MySql");
 		System.out.println("2. MongoDB");
 		System.out.println("3. Exit");
@@ -270,7 +269,7 @@ public class HappyPathClient {
 			address = (InetAddress.getLocalHost()).toString();
 		}
 		catch(Exception e){
-			System.out.println("can't get inet address.");
+			System.err.println("can't get inet address.");
 		}
 		
 		System.out.println("Welcome to IGo");
