@@ -56,6 +56,7 @@ public class HappyPathClient {
         			if(loginToken == 0)
         			{
         				System.err.println("Login failed. Please try again.\n");
+        				login(stub, dbMenu);
         			}
         			else
         			{
@@ -160,9 +161,18 @@ public class HappyPathClient {
                     else
                     {
                     	System.out.println("\nWe found "+n+" Restaurents in " +city+ ", " +state+ "!\n");
+                    	
                     }
             	}
 			
+		}
+		else
+		{
+			System.err.println("This City doesnt exixt in our Database. Please try again!\n");
+			city="Chicago"; state = "IL";
+			
+			
+			//setLocation(stub,dbMenu, city, state);
 		}
 		
 		System.out.println("What would you like to do now..  ");
@@ -255,7 +265,7 @@ public class HappyPathClient {
 		}
 		else
 		{
-			System.out.println("Wrong Input!");
+			System.err.println("Wrong Input!");
 			chooseDb();
 		}
 		return false;
