@@ -19,55 +19,91 @@ public class HappyPathClient {
         String host = (args.length < 1) ? null : args[0];
         try {
         	boolean dbMenu;
-        	int loginChoice;
             Registry registry = LocateRegistry.getRegistry(12345);
             happyPathInterface stub = (happyPathInterface) registry.lookup("rmiServer");
             
             welcome();
             
             dbMenu = chooseDb();
+            
             System.out.println("\nThank you for your input. Your prefrences are set.");
             
-            System.out.println("\n1. Exixting users.. Log In");
-            System.out.println("2. New users.. Sign Up");
-            loginChoice = input.nextInt();
-            	if(loginChoice == 2)
-            	{
-            	addAccount(stub);
-            	}
-            	else
-            		if(loginChoice == 1)
-            		{
-            			
-            			int loginToken = validateLogin(stub, dbMenu);
-            			if(loginToken == 0)
-            			{
-            				System.out.println("Login falied. Please try again.\n");
-            			}
-            			else
-            			{
-            				setLocation(stub, dbMenu);
-            			}
-            		}
-            		else
-            		{
-            			System.out.println("Wrong Choice.");
-            		}
+            login(stub, dbMenu);
+            
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
     }
 	
-	private static void setLocation(happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException, JSONException {
-		// TODO Auto-generated method stub
-		String city, state;
+	private static void login(happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException, JSONException {
+
+    	int loginChoice;
+    	String city = "Chicago", state = "IL";
+		System.out.println("\n1. Exixting users.. Log In");
+        System.out.println("2. New users.. Sign Up");
+        System.out.println("3. Exit");
+        loginChoice = input.nextInt();
+        	if(loginChoice == 2)
+        	{
+        	addAccount(stub, dbMenu);
+        	}
+        	else
+        		if(loginChoice == 1)
+        		{
+        			
+        			int loginToken = validateLogin(stub, dbMenu);
+        			if(loginToken == 0)
+        			{
+        				System.out.println("Login falied. Please try again.\n");
+        			}
+        			else
+        			{
+        				setLocation(stub, dbMenu, city, state);
+        			}
+        		}
+        		else
+        			if(loginChoice == 3)
+        			{
+        				System.out.println("\nThank you for using IGo!\n");
+        				System.exit(1);
+        			}
+        		else
+        		{
+        			System.out.println("Wrong Choice.");
+        		}
+		
+	}
+
+	private static void setLocation(happyPathInterface stub, boolean dbMenu, String city, String state) throws RemoteException, ClassNotFoundException, SQLException, JSONException 
+	{
+		int itemId = 0;
+		int changeLoc = 2;
+		System.out.println("\nYour current City is set to " +city+ " and state is set to " +state);
+		System.out.println("You can continue with this location or change it."); 
+		System.out.println("To change the location input 1 otherwise input 2. To exit the application input 3.");
+		changeLoc = input.nextInt();
+		
+		if(changeLoc == 1)
+		{
 		System.out.println("\n--Set Location and State--");
 		System.out.println("Please enter a location (Eg: Chicago, Naperville etc");
 		city = input.next();
 		System.out.println("Please enter the State ");
 		state = input.next();
-		int itemId = stub.setLocation(city, state, dbMenu);
+		itemId = stub.setLocation(city, state, dbMenu);
+		}
+		else
+			if(changeLoc == 2)
+		{
+			itemId = stub.setLocation(city, state, dbMenu);
+		}
+			else
+			{
+				System.out.println("\nThank you for using IGo!\n");
+				System.exit(1);
+			}
+		
 		
 		if(itemId != 0)
 		{
@@ -85,16 +121,22 @@ public class HappyPathClient {
             	final JSONObject obj = new JSONObject(response);
                 final JSONArray hosdata = obj.getJSONArray("Hospitals");
                 final int n = hosdata.length();
-                
-                System.out.println("\nWe found "+n+" hospitals:\n");
+                if(n != 0)
+                {
+                System.out.println("\nWe found "+n+" Hospitals in " +city+ ", " +state+ ":\n");
                 for (int i = 0; i < n; ++i) {
-                    final JSONObject restraunt = hosdata.getJSONObject(i);
-                    System.out.println(restraunt.getInt("hospitalid"));
-                    System.out.println(restraunt.getString("name"));
-                    System.out.println(restraunt.getString("type"));
-                    System.out.println(restraunt.getString("gps")+"\n");
-                    System.out.println(restraunt.getString("contactnumber")+"\n");
+                    final JSONObject hospital = hosdata.getJSONObject(i);
+                    System.out.println("Id: " +hospital.getInt("hospitalid"));
+                    System.out.println("Name: "+hospital.getString("name"));
+                    System.out.println("Type: "+hospital.getString("type"));
+                    System.out.println("Coordinates: "+hospital.getString("gps")+"\n");
+                    System.out.println("Contact: "+hospital.getString("contactnumber")+"\n");
                   }
+                }
+                else
+                {
+                	System.out.println("\nWe found "+n+" Hospitals in " +city+ ", " +state+ "!\n");
+                }
             }
             else
             	if(ch == 1)
@@ -104,23 +146,42 @@ public class HappyPathClient {
                     final JSONArray resdata = obj.getJSONArray("Restaurants");
                     final int n = resdata.length();
                     
-                    System.out.println("\nWe found "+n+" restaurents:\n");
+                    if(n != 0)
+                    {
+                    System.out.println("\nWe found "+n+" Restaurents in " +city+ ", " +state+ ":\n");
                     for (int i = 0; i < n; ++i) {
                         final JSONObject restraunt = resdata.getJSONObject(i);
-                        System.out.println(restraunt.getInt("restaurantid"));
-                        System.out.println(restraunt.getString("name"));
-                        System.out.println(restraunt.getString("type"));
-                        System.out.println(restraunt.getString("gps")+"\n");
-                       
-                       
+                        System.out.println("Id: " +restraunt.getInt("restaurantid"));
+                        System.out.println("Name: "+restraunt.getString("name"));
+                        System.out.println("Type: "+restraunt.getString("type"));
+                        System.out.println("Coordinates: "+restraunt.getString("gps")+"\n");
                       }
+                    }
+                    else
+                    {
+                    	System.out.println("\nWe found "+n+" Restaurents in " +city+ ", " +state+ "!\n");
+                    }
             	}
 			
 		}
 		
+		System.out.println("What would you like to do now..  ");
+		System.out.println("\n1. Another Search");
+        System.out.println("2. Exit\n");
+		int menuCh = input.nextInt();
+		
+		if(menuCh == 1)
+		{
+			setLocation(stub, dbMenu, city, state);
+		}
+		else
+		{
+			System.out.println("\nThank you for using IGo!\n");
+			System.exit(1);
+		}
 	}
 
-	private static void addAccount(happyPathInterface stub) throws RemoteException, ClassNotFoundException, SQLException{
+	private static void addAccount(happyPathInterface stub, boolean dbMenu) throws RemoteException, ClassNotFoundException, SQLException{
 		
 		String username, password, email, mobile; 
 		System.out.println("\n--New Account Creation--");
@@ -135,6 +196,9 @@ public class HappyPathClient {
 		try
 		{
 		stub.addAccount(username, password, email, mobile);
+		System.out.println("\nAccount created!");
+		
+		login(stub,dbMenu);
 		}
 		catch(Exception e)
 		{
@@ -177,6 +241,7 @@ public class HappyPathClient {
 		System.out.println("Please choose a DataBase that you want to access:");
 		System.out.println("1. MySql");
 		System.out.println("2. MongoDB");
+		System.out.println("3. Exit");
 		
 		choiceDB = input.nextInt();
 		//use switch case here
@@ -184,14 +249,15 @@ public class HappyPathClient {
 			return false;
 		else if(choiceDB == 2)
 			return true;
+		else if(choiceDB == 3)
+		{
+			System.out.println("\nThank you for using IGo!\n");
+			System.exit(1);
+		}
 		else
 		{
-			System.out.println("Please enter 1 or 2 as choice");
-		    choiceDB = input.nextInt();
-		    if(choiceDB == 1)
-				return false;
-			else if(choiceDB == 2)
-				return true;
+			System.out.println("Wrong Input!");
+			chooseDb();
 		}
 		return false;
 		
