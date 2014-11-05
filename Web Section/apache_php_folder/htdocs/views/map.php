@@ -1,4 +1,5 @@
 <script>
+var mapjsonurl = "/assets/temp/map.json";
 // Note: This example requires that you consent to location sharing when
 // prompted by your browser. If you see a blank space instead of the map, this
 // is probably because you have denied permission for location sharing.
@@ -35,21 +36,6 @@ function initialize() {
 	// Browser doesn't support Geolocation
 	handleNoGeolocation(false);
 	}
-
-	var marker = new google.maps.Marker({
-	  position: testjson["Locations"][0], // myLatlng
-	  map: map,
-	  title: 'Hello World!',
-	  content: testjson["Locations"][0].content
-	});
-
-	var infowindow = new google.maps.InfoWindow({
-	      content: "This is the marker for a location. My location is: " + marker.position + "<br />" + marker.content
-	  });
-
-	google.maps.event.addListener(marker, 'click', function() {
-		infowindow.open(map,marker);
-	});
 }
 
 function handleNoGeolocation(errorFlag) {
@@ -72,3 +58,36 @@ function handleNoGeolocation(errorFlag) {
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
     <div id="map-canvas"></div>
+
+
+<div id="images"></div>
+ 
+<script>
+(function() {
+  $.getJSON( mapjsonurl, {
+    format: "json"
+  })
+    .done(function( data ) {
+    	data["Locations"].forEach( function(item) {
+    		console.log(item.content)
+    		console.log(data.Locations);
+
+			var marker = new google.maps.Marker({
+				position: item, // myLatlng
+				map: map,
+				title: 'Hello World!',
+				content: item.content
+			});
+
+			var infowindow = new google.maps.InfoWindow({
+				content: "This is the marker for a location. This location is: " + marker.position + 
+						 "<br />" + "My name is: " + item.name + " of Type: " + item.type +
+						 "<br />" + item.content
+			});
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+			});
+    	});
+	});
+})();
+</script>

@@ -49,6 +49,7 @@ $login = new Login();
       }
     </style>
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <script src="../assets/js/jquery.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -87,6 +88,7 @@ $login = new Login();
                   <li class="divider"></li>
                   <li class="nav-header">Logged In Only</li>
                   <li><a href="map.php">Map</a></li>
+                  <li><a href="#">Register Event</a></li>
                   <li><a href="#">Register Visit</a></li>
                   <li><a href="#">Register Desired Visit</a></li>
                   <li><a href="#">Register Friend</a></li>

@@ -1,12 +1,11 @@
 
       <footer>
-        <p>&copy; iGo Group, CS411, 2004</p>
+        <p>&copy; iGo Group, CS441, 2014</p>
       </footer>
 
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="../assets/js/jquery.js"></script>
     <script src="../assets/js/bootstrap-transition.js"></script>
     <script src="../assets/js/bootstrap-alert.js"></script>
     <script src="../assets/js/bootstrap-modal.js"></script>
