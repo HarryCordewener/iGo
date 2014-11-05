@@ -1,29 +1,30 @@
 Filters & Requests
 
 Register_Me (POST)
-	Username: 
-	Password: 
-	Email: 
-	Telephone: 
+	Username: (string)
+	Password: (string)
+	Email: (string)
+	Telephone: (string)
 			(Respond with a json object defining: TRUE (success) or FALSE (fail))
 
 Login_Auth (POST)
-	Username: 
-	Password: 
+	Username: (string)
+	Password: (string)
 		(Respond with a json object defining: TRUE (success) or FALSE (fail))
 
 Map_Locations (POST)
-	Username:
-	Coordinate: (Lng, Lat)
-	Size: (Circular region, in ??? units)
+	Username:(string)
+	Coordinate_Lng: (Lng float)
+	Coordinate_Lat: (Lat float)
+	Size: (Circular region, in ??? units, float)
 	IncludeEvents: (OPTIONAL, Boolean)
 		(Respond with a json object of all Locations in the Coordinates-region around the 'Coordinate' within Radius 'Size'. If IncludeEvents is given, also put Events into the JSON object)
 
 Event_Locations (POST)
-	JSON Array [Locations]
+	JSON Array [Location_id(int)]
 		(Respond with a json object of events based on location-id)
 
 Desired_Visit (POST) -- increment // register as a location they want to visit.
-	Username:
-	Location-ID:
+	Username: (string)
+	Location_id: (int)
 		(Respond with a json object defining: TRUE (success) or FALSE (fail))
