@@ -1,5 +1,6 @@
 <script>
 var mapjsonurl = "/assets/temp/map.json";
+var dataset = "";
 // Note: This example requires that you consent to location sharing when
 // prompted by your browser. If you see a blank space instead of the map, this
 // is probably because you have denied permission for location sharing.
@@ -55,12 +56,19 @@ function handleNoGeolocation(errorFlag) {
   map.setCenter(options.position);
 }
 
+  function locationclick() {
+  	console.log($(this));
+  	console.log(dataset);
+  	// console.log($(this).attr("obj"));
+  	// window.alert(dataset["Locations"][this.attr("obj")]);
+  };
+
 google.maps.event.addDomListener(window, 'load', initialize);
 </script>
     <div id="map-canvas"></div>
 
 
-<div id="images"></div>
+<div id="locs"></div>
  
 <script>
 (function() {
@@ -68,7 +76,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
     format: "json"
   })
     .done(function( data ) {
-    	data["Locations"].forEach( function(item) {
+    	dataset = data;
+    	data["Locations"].forEach( function(item, index) {
     		console.log(item.content)
     		console.log(data.Locations);
 
@@ -84,6 +93,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 						 "<br />" + "My name is: " + item.name + " of Type: " + item.type +
 						 "<br />" + item.content
 			});
+
+			$("#locs").append('<br /> <a  obj="'+index+'" href="#">' + item.name + '</a>');
+
 			google.maps.event.addListener(marker, 'click', function() {
 				infowindow.open(map,marker);
 			});
