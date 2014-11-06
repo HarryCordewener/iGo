@@ -205,7 +205,7 @@ public class HappyPathClient {
 		mobile = input.next();
 		try
 		{
-		stub.addAccount(username, password, email, mobile);
+		stub.addAccount(username, password, email, mobile, true);
 		System.out.println("\nAccount created!");
 		
 		login(stub,dbMenu);

@@ -40,7 +40,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 	}
 
-	public static void main(String argv[]){
+	public static void main(String args[]){
 		Registry registry; 
 
 
@@ -49,25 +49,47 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		String JDBC_DRIVER= "com.mysql.jdbc.Driver";
 
 		//mySQL connection variables
-		String mySQLurl="jdbc:mysql://localhost:3306/igo";
-		int mySQLport=3306;
+		String mySQLurl;
 		String mySQLusername="root";
 		String mySQLpass="cs411";
+		String mongoHost;
+		int mongoPort;
+		
 
 		//selection will set database type
 		int databaseSelection=0;
+		if (args.length<2){
+			System.out.println("Usage: ./[programname][server port][full mysql url][mongodb hostname][mongodb port]");
+		}
 
 		//read port argument if present
-		if (argv.length == 1){
-			serverPort=Integer.parseInt(argv[0]);
-		}
-		else{
+		if (args.length < 1){
 			serverPort = 12345;
 		}
+		else{
+			serverPort=Integer.parseInt(args[0]);
+		}
+		if (args.length<4){
+			mongoPort=27017;
+		}else{
+			mongoPort=Integer.parseInt(args[3]);
+		}
+		if (args.length<3){
+			mongoHost="localhost";
+		}else{
+			mongoHost=args[2];
+		}
+		if (args.length<2){
+			mySQLurl="jdbc:mysql://localhost:3306/igo";
+		}
+		else{
+			mySQLurl= ("jdbc:mysql://" + args[1]);
+		}
+		System.out.println("Server Port:" + serverPort + " Mysql URL:" + mySQLurl + "Mongo host:"+ mongoHost + " Mongo Port:" + mongoPort);
 
 		HappyPathServer server = createServer();
 		connectRMI(serverPort);
-		NoSQLServer.generateData();
+		//NoSQLServer.generateData();
 		System.out.println("Rmi connected");
 
 		/*

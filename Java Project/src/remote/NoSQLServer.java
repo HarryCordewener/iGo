@@ -41,6 +41,26 @@ public class NoSQLServer {
 			return auth;
 		}
 	}
+	
+	public static boolean connectNoSQL(String url, int port) {
+		mongoDBurl= url;
+		mongoDBport= port;
+		boolean auth = false;
+		try {
+			// To connect to mongodb server
+			mongoClient = new MongoClient(mongoDBurl, 27017);
+			// Now connect to your databases
+			db = mongoClient.getDB(mongoDBName);
+			System.out.println("Connect to database successfully");
+			auth = db.authenticate(mongoDBusername, mongoDBpassword);
+			System.out.println("Authentication: " + auth);
+			return auth;
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			return auth;
+		}
+	}
+
 
 	/*
 	 * Function closes open DB connection
@@ -271,6 +291,30 @@ public class NoSQLServer {
 		//if data already exists do not generate!
 		int rowCount = 0;
 		if(connectNoSQL()){
+			DBCollection collection = db.getCollection("users");
+			rowCount = collection.find().count();
+			closeConnectionNoSQL();
+		}
+		else{
+			//System.out.println("Adding User  - ");
+			db = mongoClient.getDB(mongoDBName);
+			WriteResult wr = db.addUser(mongoDBusername, mongoDBpassword);
+			closeConnectionNoSQL();
+		}
+		if(rowCount==0) {
+			//System.out.println("Now creating users...");
+			generateUsers();
+			generateLocations();
+			generateRestaurants();
+			generateHospitals();
+		}
+		return;
+	}
+	
+	public static void generateData(String url, int port){
+		//if data already exists do not generate!
+		int rowCount = 0;
+		if(connectNoSQL(url, port)){
 			DBCollection collection = db.getCollection("users");
 			rowCount = collection.find().count();
 			closeConnectionNoSQL();
