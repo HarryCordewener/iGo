@@ -26,7 +26,7 @@ public class HappyPathClient {
             
             dbMenu = chooseDb();
             
-            System.out.println("\nThank you for your input. Your prefrences are set.");
+            System.out.println("\nDB prefrences set.");
             
             login(stub, dbMenu);
             
@@ -81,8 +81,10 @@ public class HappyPathClient {
 		int itemId = 0;
 		int changeLoc = 2;
 		System.out.println("\nYour current City is set to " +city+ " and state is set to " +state);
-		System.out.println("You can continue with this location or change it."); 
-		System.out.println("To change the location input 1 otherwise input 2. To exit the application input 3.");
+		//System.out.println("You can continue with this location or change it."); 
+		System.out.println("1. Change Location");
+		System.out.println("2. Keep location");
+		System.out.println("3. Quit");
 		changeLoc = input.nextInt();
 		
 		if(changeLoc == 1)
@@ -111,7 +113,7 @@ public class HappyPathClient {
 			String response;
 			int ch;
 			System.out.println("Please select a business type that you wish to search.. ");
-			System.out.println("\n1. Restaurents");
+			System.out.println("\n1. Restaurants");
             System.out.println("2. Hospitals\n");
             ch = input.nextInt();
             

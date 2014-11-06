@@ -18,7 +18,7 @@ public class NoSQLServer {
 	static int mongoDBport = 27017;
 	static String mongoDBName = "iGo";
 	static String mongoDBusername = "root";
-	static char[] mongoDBpassword = "cs411".toCharArray();
+	static char[] mongoDBpassword = "cs441".toCharArray();
 	static MongoClient mongoClient = null;
 	static DB db = null;
 	/*

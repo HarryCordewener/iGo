@@ -67,7 +67,8 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 			serverPort = 12345;
 		}
 		else{
-			serverPort=Integer.parseInt(args[0]);
+			//serverPort=Integer.parseInt(args[0]);
+			serverPort=12345;
 		}
 		if (args.length<4){
 			mongoPort=27017;
