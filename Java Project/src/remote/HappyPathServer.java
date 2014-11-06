@@ -85,27 +85,11 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		else{
 			mySQLurl= ("jdbc:mysql://" + args[1]);
 		}
-		System.out.println("Server Port:" + serverPort + " Mysql URL:" + mySQLurl + "Mongo host:"+ mongoHost + " Mongo Port:" + mongoPort);
-
+		
 		HappyPathServer server = createServer();
 		connectRMI(serverPort);
-		//NoSQLServer.generateData();
+		NoSQLServer.generateData();
 		System.out.println("Rmi connected");
-
-		/*
-		try {
-			System.out.print(server.seeResteraunts(1,false));
-			System.out.print(server.seeHospitals(1,false));
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 
 	}
 
