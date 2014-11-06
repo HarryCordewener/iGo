@@ -16,6 +16,10 @@ import java.net.*;
 import java.util.ArrayList;
 import java.sql.*;
 
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
 
 
 /*
@@ -50,12 +54,6 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		String mySQLusername="root";
 		String mySQLpass="cs411";
 
-		//mongodb variables
-		String mongoDBurl;
-		int mongoDBport;
-		String mongoDBusername;
-		String mongoDBpassword;
-
 		//selection will set database type
 		int databaseSelection=0;
 
@@ -69,7 +67,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		HappyPathServer server = createServer();
 		connectRMI(serverPort);
-
+		NoSQLServer.generateData();
 		System.out.println("Rmi connected");
 
 		/*
@@ -94,6 +92,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	public static HappyPathServer createServer() {
 		try{
 			HappyPathServer server = new HappyPathServer();
+			//Generating Data for NoSQL
 			return server;
 		}
 		catch (Exception e){
@@ -177,9 +176,11 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		}
 		else{
-
 			//mongodb validation here
-			return 0;
+			int id = NoSQLServer.validateLogin(user, pass);
+			
+			System.out.println("User" + id + " logged in");
+			return id;
 		}
 	}
 
@@ -255,15 +256,16 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 		}
 		else if (nosql){
-			return 0;
-
+			//mongodb setLocation function called
+			int id = NoSQLServer.setLocation( loc, state);
+			return id;
 		}
 		return 0;
 	}
 
 	/*
 	 * seeRestraunts:
-	 * This method returns a JSON list of restraunts in the selected location
+	 * This method returns a JSON list of restaurants in the selected location
 	 * (non-Javadoc)
 	 * @see remote.happyPathInterface#seeResteraunts(int, boolean)
 	 */
@@ -271,37 +273,43 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	@Override
 	public String seeRestauraunts(int locationid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException {
 
-
-		Connection con = connectSQL();
-		Statement stmt = con.createStatement ();
-
-
-		StringBuilder restaurantsJSON = new StringBuilder(1000);
-		restaurantsJSON.append("{ Restaurants:[");
-		String query = "SELECT * FROM restaurants where locationid = " + locationid + " limit 100;";
-
-		//STEP 4: Execute a query
-		System.out.println("Creating statement- querying resteraunts...");
-		//stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(query);
-
-		while(rs.next()){
-			int restid  = rs.getInt("restrauntid");
-			String name = rs.getString("name");
-			String type = rs.getString("type");
-			String gps = rs.getString("gps");
-			Restaurant temp = new Restaurant(gps, name, locationid, restid, type);
-			System.out.println(temp.toString());
-			restaurantsJSON.append(temp.toString());
-
-			restaurantsJSON.append(",");
+		if(!nosql) {
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
+	
+	
+			StringBuilder restaurantsJSON = new StringBuilder(1000);
+			restaurantsJSON.append("{ Restaurants:[");
+			String query = "SELECT * FROM restaurants where locationid = " + locationid + " limit 100;";
+	
+			//STEP 4: Execute a query
+			System.out.println("Creating statement- querying resteraunts...");
+			//stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+	
+			while(rs.next()){
+				int restid  = rs.getInt("restrauntid");
+				String name = rs.getString("name");
+				String type = rs.getString("type");
+				String gps = rs.getString("gps");
+				Restaurant temp = new Restaurant(gps, name, locationid, restid, type);
+				System.out.println(temp.toString());
+				restaurantsJSON.append(temp.toString());
+	
+				restaurantsJSON.append(",");
+			}
+			
+			closeResults(stmt, rs);
+			restaurantsJSON.append("]}");
+			closeConnection(con);
+	
+			return restaurantsJSON.toString();
 		}
-		
-		closeResults(stmt, rs);
-		restaurantsJSON.append("]}");
-		closeConnection(con);
-
-		return restaurantsJSON.toString();
+		else{
+			//mongodb seeRestaurants called here
+			String restaurantsJSON = NoSQLServer.seeRestaurants(locationid);
+			return restaurantsJSON;
+		}
 
 	}
 
@@ -328,21 +336,27 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 * @see remote.happyPathInterface#addAccount(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void addAccount(String username, String password, String email, String mobile) throws RemoteException, ClassNotFoundException, SQLException{
+	public void addAccount(String username, String password, String email, String mobile, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException{
 
-		Connection con = connectSQL();
-		Statement stmt = con.createStatement ();
-
-		boolean found = false;
-		//Connection conn = connectMySQL();
-		String query = "INSERT INTO users ( `Name`, `Email`, `MobileNumber`, `Password`) VALUES ('"+ username +"', '"+ email +"', '"+ mobile + "', '"+password +"');";
-
-
-		//STEP 4: Execute a query
-		System.out.println("Creating statement- adding user");
-		insertMySQL(stmt, query);
-		closeInsertion(stmt);
-		closeConnection(con);
+		if(!nosql) {
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
+	
+			boolean found = false;
+			//Connection conn = connectMySQL();
+			String query = "INSERT INTO users ( `Name`, `Email`, `MobileNumber`, `Password`) VALUES ('"+ username +"', '"+ email +"', '"+ mobile + "', '"+password +"');";
+	
+	
+			//STEP 4: Execute a query
+			System.out.println("Creating statement- adding user");
+			insertMySQL(stmt, query);
+			closeInsertion(stmt);
+			closeConnection(con);
+		}
+		else{
+			//mongodb seeRestaurants called here
+			NoSQLServer.addAccount(username, password, email, mobile);
+		}
 
 	}
 
@@ -431,7 +445,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 * @see remote.happyPathInterface#displayFriendMenu(int)
 	 */
 	@Override
-	public void displayFriendMenu(int db) throws RemoteException {
+	public void displayFriendMenu(int db, boolean nosql) throws RemoteException {
 
 	}
 
@@ -442,7 +456,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	 * @see remote.happyPathInterface#addFriend(int, int)
 	 */
 	@Override
-	public void addFriend(int userid, int friendid) throws RemoteException {
+	public void addFriend(int userid, int friendid, boolean nosql) throws RemoteException {
 		// TODO Auto-generated method stub
 
 	}
@@ -450,7 +464,7 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 
 	@Override
-	public int getUsernamefromEmail(String email) throws RemoteException {
+	public int getUsernamefromEmail(String email, boolean nosql) throws RemoteException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -458,41 +472,47 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 	@Override
 	public String seeHospitals(int locationid, boolean nosql)
 			throws RemoteException, ClassNotFoundException, SQLException {
-
-		Connection con = connectSQL();
-		Statement stmt = con.createStatement ();
-
-		StringBuilder hospitalsJSON= new StringBuilder(10000);
-		hospitalsJSON.append("{Hospitals: [");
-		String query = "SELECT * FROM hospitals where locationid = " + locationid + ";";
-
-		//STEP 4: Execute a query
-		System.out.println("Creating statement- querying resteraunts...");
-
-		ResultSet rs = stmt.executeQuery(query);
-		int counter=0;
-		while(rs.next()){
-			int restid  = rs.getInt("hospitalid");
-			String name = rs.getString("name");
-			String type = rs.getString("type");
-			String gps = rs.getString("gps");
-			String contact = rs.getString("contactnumber");
-			Hospital temp = new Hospital(gps, name, locationid, restid, type, contact);
-			hospitalsJSON.append(temp.toString());
-			hospitalsJSON.append(",");
+		if(!nosql){
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
+	
+			StringBuilder hospitalsJSON= new StringBuilder(10000);
+			hospitalsJSON.append("{Hospitals: [");
+			String query = "SELECT * FROM hospitals where locationid = " + locationid + ";";
+	
+			//STEP 4: Execute a query
+			System.out.println("Creating statement- querying hospitals...");
+	
+			ResultSet rs = stmt.executeQuery(query);
+			int counter=0;
+			while(rs.next()){
+				int restid  = rs.getInt("hospitalid");
+				String name = rs.getString("name");
+				String type = rs.getString("type");
+				String gps = rs.getString("gps");
+				String contact = rs.getString("contactnumber");
+				Hospital temp = new Hospital(gps, name, locationid, restid, type, contact);
+				hospitalsJSON.append(temp.toString());
+				hospitalsJSON.append(",");
+			}
+	
+			closeResults(stmt, rs);
+			hospitalsJSON.append("]}");
+	
+			closeConnection(con);
+			return hospitalsJSON.toString();
 		}
-
-		closeResults(stmt, rs);
-		hospitalsJSON.append("]}");
-
-		closeConnection(con);
-		return hospitalsJSON.toString();
-
+		else{
+			//mongodb seeRestaurants called here
+			String hospitalsJSON = NoSQLServer.seeHospitals(locationid);
+			return hospitalsJSON;
+		}
+		
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void displayMyFriends(int userid) throws RemoteException,
+	public void displayMyFriends(int userid, boolean nosql) throws RemoteException,
 	ClassNotFoundException, SQLException {
 		// TODO Auto-generated method stub
 
@@ -505,9 +525,5 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 
 
 	}
-
-
-
-
 
 }

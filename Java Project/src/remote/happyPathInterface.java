@@ -16,12 +16,12 @@ public interface happyPathInterface extends Remote{
 
 	void recieveMessage(String x)throws RemoteException;//test method
 	
-	void addAccount(String username, String password, String email, String mobileNumber)throws RemoteException, ClassNotFoundException, SQLException;
-	void displayFriendMenu(int db) throws RemoteException, ClassNotFoundException, SQLException;//displays all users in database
-	void displayMyFriends (int userid)throws RemoteException, ClassNotFoundException, SQLException;//displays user's friends
-	void addFriend(int userid, int friendid) throws RemoteException, ClassNotFoundException, SQLException; //Must add friend and apply to BOTH databases!
+	void addAccount(String username, String password, String email, String mobileNumber, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
+	void displayFriendMenu(int db, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;//displays all users in database
+	void displayMyFriends (int userid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//displays user's friends
+	void addFriend(int userid, int friendid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException; //Must add friend and apply to BOTH databases!
 	
-	int validateLogin (String user, String pass, boolean db)throws RemoteException, ClassNotFoundException, SQLException;//checks username and password 
+	int validateLogin (String user, String pass, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//checks username and password 
 	//int getMongoUserID(String user);
 	//Validate login only verifies using SQL
 	//if validateLogin returns 0, login was unsuccessuful, do not show menu,
@@ -29,7 +29,7 @@ public interface happyPathInterface extends Remote{
 	
 	int setLocation (String city, String state, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//input a city and state to lookup a location in the database
 	
-	int getUsernamefromEmail(String email) throws RemoteException, ClassNotFoundException, SQLException;
+	int getUsernamefromEmail(String email, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;
 	
 	String seeRestauraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a lsit of restraunts with all attributes in JSON
@@ -37,6 +37,6 @@ public interface happyPathInterface extends Remote{
 	String seeHospitals(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a lsit of hospitals with all attributes in JSON
 	
-	void Logout(int userid)throws RemoteException, ClassNotFoundException, SQLException;;
+	void Logout(int userid)throws RemoteException, ClassNotFoundException, SQLException;
 
 }
