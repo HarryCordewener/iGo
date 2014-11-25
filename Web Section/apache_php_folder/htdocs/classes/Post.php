@@ -1,3 +1,5 @@
+<?php
+
 function GetPost( $url, $fields ) {
 	//url-ify the data for the POST
 	foreach($fields as $key=>$value) { $fields_string .= $key.'='. urlencode($value).'&'; }
@@ -16,8 +18,7 @@ function GetPost( $url, $fields ) {
 
 	//close connection
 	curl_close($ch);
-    } else {
-        $this->errors[] = "Database connection problem.";
-    }
+
     return $result;
 }
+
