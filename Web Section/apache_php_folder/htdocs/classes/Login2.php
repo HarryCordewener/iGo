@@ -9,11 +9,6 @@ include 'Post.php';
 class Login
 {
 	private $loginurl = '/Login_Auth' ;
-
-    /**
-     * @var object The database connection
-     */
-    private $db_connection = null;
     /**
      * @var array Collection of error messages
      */
@@ -58,7 +53,7 @@ class Login
 			$truefalse = GetPost($loginurl, array( "Username" => $_POST['user_name'], 
 													 "Password" => $_POST['user_password'] )); 
 
-            if($truefalse) {
+            if($truefalse == "true") {
             	// write user data into PHP SESSION (a file on your server)
                 $_SESSION['user_name'] = $_POST['user_name'];
                 $_SESSION['user_login_status'] = 1;
