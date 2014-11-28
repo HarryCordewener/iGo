@@ -5,7 +5,7 @@ var dataset = "";
 // prompted by your browser. If you see a blank space instead of the map, this
 // is probably because you have denied permission for location sharing.
 
-var testjson = {"Locations": [{"lat":41.877849999999995,"lng":-87.64101670000002,"content":"Event: Words" }]};
+var testjson = {"Locations": [{"lat":41.877849999999995,"lng":-87.64101670000002,"content":"Event: Words","Location_Id":5 }]};
 var myLatlng = new google.maps.LatLng(testjson["Locations"][0]["lat"],testjson["Locations"][0]["lng"]);
 
 var map;
@@ -72,7 +72,8 @@ google.maps.event.addDomListener(window, 'load', initialize);
  
 <script>
 (function() {
-  $.getJSON( mapjsonurl, {
+
+  $.getJSON( mapjsonurl /* + '?username=<?php echo $_SESSION['user_name']; ?>&Coordinate_Lng='+position.coords.latitude+'&Coordinate_Lat='+position.coords.latitude+'&size=500&IncludeEvents=true' */, { // This needs to be edited to call the right POST page with the right arguments
     format: "json"
   })
     .done(function( data ) {
@@ -81,17 +82,21 @@ google.maps.event.addDomListener(window, 'load', initialize);
     		console.log(item.content)
     		console.log(data.Locations);
 
+
 			var marker = new google.maps.Marker({
 				position: item, // myLatlng
 				map: map,
-				title: 'Hello World!',
+				title: item.name,
 				content: item.content
 			});
+
+			var addaddress = 'Desired_Visit?Username=<?php echo $_SESSION["user_name"]; ?>&Location_Id=' + item.Location_Id;
 
 			var infowindow = new google.maps.InfoWindow({
 				content: "This is the marker for a location. This location is: " + marker.position + 
 						 "<br />" + "My name is: " + item.name + " of Type: " + item.type +
 						 "<br />" + item.content
+						 "<br />" + '<a href="'+ addaddress +'">'
 			});
 
 			$("#locs").append('<br /> <a  obj="'+index+'" href="#">' + item.name + '</a>');

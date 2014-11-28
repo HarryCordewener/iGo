@@ -1,0 +1,1 @@
+This was used in original version of the login system. This is not used, but remains here for proof that some of the PHP code is not ours.
