@@ -46,6 +46,13 @@ CREATE TABLE `hospitals` (
   CONSTRAINT `id` FOREIGN KEY (`locationID`) REFERENCES `locations` (`LocationID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
+ALTER TABLE `test`.`restaurants` 
+ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);
+
+ALTER TABLE `test`.`hospitals` 
+ADD UNIQUE INDEX `name_UNIQUE` (`name` ASC);
+
+
 INSERT INTO `locations` VALUES (1,'Chicago','41.836944, -87.684722','City','',1,'IL'),(2,'New York','40.710836, -74.023322','City','',1,'NY');
 
 Select locationid from locations where locationname ='Chicago';

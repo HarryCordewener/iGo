@@ -5,5 +5,7 @@
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.33-bin.jar"/>
 	<classpathentry kind="lib" path="lib/org.json-20120521.jar"/>
 	<classpathentry kind="lib" path="lib/mongo-2.10.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/scribe-1.3.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/LOKESH/Desktop/CS 441/Project/jar/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

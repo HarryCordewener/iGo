@@ -3,9 +3,12 @@
 package remote;
 
 
+import java.io.IOException;
 import java.rmi.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.json.JSONException;
 
 /*
  * The ReceiveMessageInterface holds all methods to interact with the server stored accounts
@@ -13,6 +16,8 @@ import java.util.ArrayList;
  * NOTE receiveMessage, passArrayList and updateArrayList were for testing only and not implemented by the client
  */
 public interface happyPathInterface extends Remote{
+	
+	String getData(String Term,String Location) throws  IOException, JSONException;
 
 	void recieveMessage(String x)throws RemoteException;//test method
 	

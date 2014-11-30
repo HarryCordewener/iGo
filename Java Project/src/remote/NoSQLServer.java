@@ -150,6 +150,7 @@ public class NoSQLServer {
 			//Second Search
 			data = "{\"state\":\"" + state + "\"}, { \"subtype\": \"General\"}";
 			queryObj = (DBObject) JSON.parse(data);
+			cursor = collection.find(queryObj);
 			try{
 				while(cursor.hasNext()) {
 					locationId = (int)Float.parseFloat((cursor.next().get("locationid").toString()));

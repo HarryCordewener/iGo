@@ -12,25 +12,24 @@ package remote;
 import java.rmi.*;
 import java.rmi.registry.*;
 import java.rmi.server.*;
+import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
 import java.sql.*;
 
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 
+import org.json.JSONException;
 
-
+import yelp.Yelp;
 /*
  * ASSUMPTIONS:
  * 
  */
 
-
+@WebService
 @SuppressWarnings("serial")
-public class HappyPathServer extends 
-java.rmi.server.UnicastRemoteObject implements happyPathInterface{
+public class HappyPathServer extends UnicastRemoteObject implements happyPathInterface{
 
 	int dbselection =1;
 	//static Connection conn;
@@ -531,6 +530,16 @@ java.rmi.server.UnicastRemoteObject implements happyPathInterface{
 		// TODO Auto-generated method stub
 
 
+	}
+	
+	//WebService - Lokesh, Chetana
+	@Override
+	@WebMethod
+	public String getData(String Term, String Location) throws IOException,
+			JSONException {
+		Yelp yelp = new Yelp();
+		yelp.getData(Term, Location);
+		return null;
 	}
 
 }
