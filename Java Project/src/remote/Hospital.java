@@ -61,6 +61,16 @@ public class Hospital extends locationSuper{
 		return " {\"hospitalid\":" + hospitalID +",\"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":" + name + ", \"type\":" + hospitalType + 
 				", \"contactnumber\":" + contactNumber + "}";
 	}
+	
+	public String toString2(){
+		return " {\"policeid\":" + hospitalID +",\"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":" + name +  
+				", \"contactnumber\":" + contactNumber + "}";
+	}
+	
+	public String toString3(){
+		return " {\"schoolid\":" + hospitalID +",\"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":" + name + ", \"type\":" + hospitalType + 
+				 "}";
+			}
 
 
 }

@@ -204,6 +204,22 @@ public class NoSQLServer {
 	
 	}
 	
+	public static String seeAirports(int locationid){
+		return null;
+	}
+	
+	public static String seeBanks(int locationid){
+		return null;
+	}
+	
+	public static String seeBars(int locationid){
+		return null;
+	}
+	
+	public static String seeHotels(int locationid){
+		return null;
+	}
+	
 	public static String seeHospitals(int locationid) {
 
 		if(connectNoSQL()){
@@ -430,6 +446,26 @@ public class NoSQLServer {
 			//query = "db.hospitals.drop()";
 			closeConnectionNoSQL();
 		}
+	}
+
+	public static String seePolice(int locationid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String seeTheaters(int locationid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String seeSchools(int locationid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static String seeStores(int locationid) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	
