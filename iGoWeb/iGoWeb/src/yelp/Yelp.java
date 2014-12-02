@@ -12,6 +12,8 @@ import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
 
+import remote.NoSQLServer;
+
 import java.io.IOException;
 
 
@@ -92,14 +94,15 @@ public class Yelp {
     	{
     		JSONObject s = (JSONObject) businesses.get(i);
     		dataInsert.add2DB(s,TableType,gpscoor);
+    		NoSQLServer.insertNoSQL(TableType, s.toString());
     		String restid = s.get("id").toString();
     		String restype = ((JSONArray) (((JSONArray) (s.get("categories"))).get(0))).get(0).toString();
     		String name = s.get("name").toString();
     		JSONObject location;
     		try {
     			location = (JSONObject) (s.get("location"));
-    			longitude = ((JSONObject) location.get("coordinate")).get("latitude").toString();
-    			lattitude = ((JSONObject) location.get("coordinate")).get("longitude").toString();
+    			lattitude = ((JSONObject) location.get("coordinate")).get("latitude").toString();
+    			longitude = ((JSONObject) location.get("coordinate")).get("longitude").toString();
     			} 
     		catch (Exception e) {
     			longitude = "NA";

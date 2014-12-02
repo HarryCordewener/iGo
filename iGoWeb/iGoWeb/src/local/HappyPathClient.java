@@ -20,9 +20,10 @@ import remote.happyPathInterface;
 
 @WebService
 public class HappyPathClient {
+	
 	@SuppressWarnings("resource")
 	static Scanner input = new Scanner(System.in);
-
+	
 	public static void main(String[] args) throws RemoteException {
 
 		String host = (args.length < 1) ? null : args[0];
