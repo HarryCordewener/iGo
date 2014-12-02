@@ -12,7 +12,7 @@ public class fetchData {
 	public static String queryLocation(JSONObject obj) {
 		String DB_URL = "jdbc:mysql://localhost:3306/test";
 		String USER = "root";
-		String PASS = "loki";
+		String PASS = "cs441";
 		String queryitem = ((JSONObject) obj.get("location")).get("city")
 				.toString();
 		Connection conn = null;
@@ -73,7 +73,7 @@ public class fetchData {
 		// String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 		String DB_URL = "jdbc:mysql://localhost:3306/test";
 		String USER = "root";
-		String PASS = "loki";
+		String PASS = "cs441";
 
 		Connection conn = null;
 		Statement stmt = null;

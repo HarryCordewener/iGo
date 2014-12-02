@@ -287,6 +287,7 @@ public class HappyPathClient {
 	public String getYelpData(String methodName, String arg1, String arg2,
 			String arg3, String arg4, String arg5) throws IOException, JSONException {
 		String data = "";
+		boolean nosql = false;
 		Registry registry = LocateRegistry.getRegistry(12345);
 		try {
 			happyPathInterface stub = (happyPathInterface) registry
@@ -304,8 +305,11 @@ public class HappyPathClient {
 				System.out.println("inside login");
 				String user = arg1;
 				String pass = arg2;
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				int intData = stub.validateLogin(user, pass, true);
+				if(arg3.equals("0"))
+					nosql = false;
+				else
+					nosql = true;
+				int intData = stub.validateLogin(user, pass, nosql);
 				data = data + intData;
 				System.out.println("out of login");
 				break;
@@ -315,27 +319,40 @@ public class HappyPathClient {
 				String email = arg2;
 				String mobile = arg3;
 				String pwd = arg4;
-				//boolean nosql = Boolean.parseBoolean(arg5);
-				stub.addAccount(name, pwd, email, mobile, true);
+				if(arg5.equals("0"))
+					nosql = false;
+				else
+					nosql = true;
+				stub.addAccount(name, pwd, email, mobile, nosql);
+				stub.addAccount(name, pwd, email, mobile, !nosql);				
 				data = "";
 				System.out.println("out of addAccount");
 				break;
 			case "setLocation" :
 				String city = arg1;
 				String state = arg2;
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				int locationId = stub.setLocation(city, state, true);
+				if(arg3.equals("0"))
+					nosql = false;
+				else
+					nosql = true;
+				int locationId = stub.setLocation(city, state, nosql);
 				data = "" + locationId;
 				break;
 			case "seeRestaurants" :
 				int locationid = Integer.parseInt(arg1);
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeRestauraunts(locationid, true);
+				if(arg2.equals("0"))
+					nosql = false;
+				else
+					nosql = true;
+				data = stub.seeRestauraunts(locationid, nosql);
 				break;
 			case "seeHospitals" :
 				locationid = Integer.parseInt(arg1);
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeHospitals(locationid, true);
+				if(arg2.equals("0"))
+					nosql = false;
+				else
+					nosql = true;
+				data = stub.seeHospitals(locationid, nosql);
 				break;
 			default:
 				System.out
