@@ -9,6 +9,7 @@ include 'Post.php';
 class Login
 {
 	private $loginurl = '/Login_Auth' ;
+    private $serviceurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?Login';
     /**
      * @var array Collection of error messages
      */
@@ -43,22 +44,59 @@ class Login
      */
     private function dologinWithPostData()
     {
+        $loginxml = 
+        '<?xml version="1.0" encoding="UTF-8"?>
+         <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+            <SOAP-ENV:Header/>
+            <S:Body>
+                <ns2:getYelpData xmlns:ns2="http://local/">
+                    <arg0>login</arg0>
+                    <arg1>%s</arg1>
+                    <arg2>%s</arg2>
+                    <arg3>0</arg3>
+                </ns2:getYelpData>
+            </S:Body>
+        </S:Envelope>';
+
         // check login form contents
         if (empty($_POST['user_name'])) {
             $this->errors[] = "Username field was empty.";
         } elseif (empty($_POST['user_password'])) {
             $this->errors[] = "Password field was empty.";
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-			
+			$loginxml = sprintf($loginxml, $_POST['user_name'], $_POST['user_password']);
+
+            /*
 			$truefalse = GetPost($loginurl, array( "Username" => $_POST['user_name'], 
 													 "Password" => $_POST['user_password'] )); 
+            */
 
-            if($truefalse == "true") {
+            $soap_do = curl_init(); 
+
+            curl_setopt($soap_do, CURLOPT_URL,            $serviceurl );   
+            curl_setopt($soap_do, CURLOPT_CONNECTTIMEOUT, 10); 
+            curl_setopt($soap_do, CURLOPT_TIMEOUT,        10); 
+            curl_setopt($soap_do, CURLOPT_RETURNTRANSFER, true );
+            curl_setopt($soap_do, CURLOPT_SSL_VERIFYPEER, false);  
+            curl_setopt($soap_do, CURLOPT_SSL_VERIFYHOST, false); 
+            curl_setopt($soap_do, CURLOPT_POST,           true ); 
+            curl_setopt($soap_do, CURLOPT_POSTFIELDS,    $loginxml); 
+            curl_setopt($soap_do, CURLOPT_HTTPHEADER,     array('Content-Type: text/xml; charset=utf-8', 'Content-Length: '.strlen($loginxml) )); 
+            // curl_setopt($soap_do, CURLOPT_USERPWD, $user . ":" . $password);
+            
+
+            $truefalse = curl_exec($soap_do);
+            $err = curl_error($soap_do);  
+
+            if($truefalse == "1") {
             	// write user data into PHP SESSION (a file on your server)
                 $_SESSION['user_name'] = $_POST['user_name'];
                 $_SESSION['user_login_status'] = 1;
+                echo "FALSE";
             } else {
-                $this->errors[] = "Wrong username or password. Try again.";
+                $this->errors[] = '<code> Returned: >'.$truefalse.'< with error: '.$err.'</code>';
+
+                //$this->errors[] = '<font color="white">Wrong username or password. Try again.</font>';
             }
         }
     }
