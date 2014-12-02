@@ -9,6 +9,8 @@ include 'Post.php';
 class Registration
 {
     private $registerurl = '/Register_Me' ;
+    private $serviceurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?Tester';
+    private $serviceWSDLurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?WSDL';
 
     /**
      * @var array $errors Collection of error messages
@@ -66,11 +68,19 @@ class Registration
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
         ) {
-            $truefalse = GetPost($loginurl, array( "Username" => $_POST['user_name'], 
+
+            /* $truefalse = GetPost($loginurl, array( "Username" => $_POST['user_name'], 
                                                     "Email" => $_POST['user_email'], 
                                                     "Telephone" => $_POST['user_phone'], 
-                                                    "Password" => $_POST['user_password_new'] )); 
-            if( $truefalse == "true" ) {
+                                                    "Password" => $_POST['user_password_new'] )); */
+
+            $requestParams = array( 'login', $_POST['user_name'], $_POST['user_email'], $_POST['user_phone'], $_POST['user_password_new']);
+
+            $client = new SoapClient($serviceWSDLurl);
+            $response = $client->getYelpData($requestParams);
+
+            $truefalse = print_r($response);
+            if( $truefalse == "" ) {
                 $this->messages[] = "Your account has been created successfully. You can now log in.";
             } else {
                 $this->errors[] = $truefalse;
