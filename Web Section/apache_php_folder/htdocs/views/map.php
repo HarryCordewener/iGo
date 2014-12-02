@@ -1,4 +1,55 @@
 <script>
+
+var webServiceURL = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?WSDL';
+/* var getRestaurants = '<?xml version="1.0" encoding="UTF-8"?><S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"> \
+    <SOAP-ENV:Header/> \
+    <S:Body> \
+        <ns2:getYelpData xmlns:ns2="http://local/"> \
+            <arg0>seeRestaurants</arg0> \
+            <arg1>1</arg1> \
+            <arg2>0</arg2> \
+        </ns2:getYelpData> \
+    </S:Body> \
+</S:Envelope>';
+*/
+
+function CallService()
+{
+	/*
+    $.ajax({
+        url: webServiceURL, 
+        type: "POST",
+        dataType: "json", 
+        processData: false,
+        data: getRestaurants, 
+        success: OnSuccess, 
+        error: OnError
+    }); */
+	$.soap({
+		url: webServiceURL,
+		method: 'getYelpData',
+
+		data: {
+			arg0: 'seeRestaurants',
+			arg1: '1',
+			arg2: '0'
+		},
+		
+		success: function (soapResponse) {
+    		alert(soapResponse.toJSON());
+			// do stuff with soapResponse
+			// if you want to have the response as JSON use soapResponse.toJSON();
+			// or soapResponse.toString() to get XML string
+			// or soapResponse.toXML() to get XML DOM
+		},
+		error: function (SOAPResponse) {
+			debugger;
+			alert(SOAPResponse);
+		}
+	});
+    return false;
+}
+
 var mapjsonurl = "/assets/temp/map.json";
 var dataset = "";
 // Note: This example requires that you consent to location sharing when
@@ -11,6 +62,7 @@ var myLatlng = new google.maps.LatLng(testjson["Locations"][0]["lat"],testjson["
 var map;
 
 function initialize() {
+	CallService();
 	var mapOptions = {
 	zoom: 6
 	};
@@ -90,13 +142,14 @@ google.maps.event.addDomListener(window, 'load', initialize);
 				content: item.content
 			});
 
+			// To be altered into a SOAP request later
 			var addaddress = 'Desired_Visit?Username=<?php echo $_SESSION["user_name"]; ?>&Location_Id=' + item.Location_Id;
 
 			var infowindow = new google.maps.InfoWindow({
 				content: "This is the marker for a location. This location is: " + marker.position + 
 						 "<br />" + "My name is: " + item.name + " of Type: " + item.type +
-						 "<br />" + item.content
-						 "<br />" + '<a href="'+ addaddress +'">'
+						 "<br />" + item.content +
+						 "<br />" + '<a href="'+ addaddress +'">Link</a>'
 			});
 
 			$("#locs").append('<br /> <a  obj="'+index+'" href="#">' + item.name + '</a>');

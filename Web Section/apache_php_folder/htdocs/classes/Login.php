@@ -51,7 +51,10 @@ class Login
             $this->errors[] = "Password field was empty.";
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
             $truefalse = "0";
-            $requestParams = array( 'arg0'=>'login', 'arg1'=>$_POST['user_name'], 'arg2'=>$_POST['user_password'], 'arg3'=>"0");
+            $requestParams = array( 'arg0'=>'login', 
+                                    'arg1'=>$_POST['user_name'], 
+                                    'arg2'=>$_POST['user_password'], 
+                                    'arg3'=>"0");
 
             $client = new SoapClient('http://54.69.0.233:8080/iGoWeb/HappyPathClientService?wsdl', 
                 array("trace" => 1, "exception" => 0, 'features' => SOAP_SINGLE_ELEMENT_ARRAYS) );

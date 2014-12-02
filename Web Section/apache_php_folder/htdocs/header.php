@@ -50,6 +50,7 @@ $login = new Login();
     </style>
     <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
     <script src="../assets/js/jquery.js"></script>
+    <script src="../assets/js/jquery_soap/jquery.soap.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->

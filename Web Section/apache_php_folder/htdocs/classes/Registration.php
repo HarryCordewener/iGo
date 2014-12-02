@@ -38,7 +38,7 @@ class Registration
      */
     private function registerNewUser()
     {
-        $telephone = "000-0000-000"; // Not implemented.
+        $telephone = "0000000000"; // Not implemented.
         if (empty($_POST['user_name'])) {
             $this->errors[] = "Empty Username";
         } elseif (empty($_POST['user_password_new']) || empty($_POST['user_password_repeat'])) {
@@ -68,23 +68,26 @@ class Registration
             && !empty($_POST['user_password_repeat'])
             && ($_POST['user_password_new'] === $_POST['user_password_repeat'])
         ) {
+            $truefalse = "0";
+            $requestParams = array( 'arg0'=>'addAccount', 
+                                    'arg1'=>$_POST['user_name'], 
+                                    'arg2'=>$_POST['user_email'], 
+                                    'arg3'=>$telephone, 
+                                    'arg4'=>$_POST['user_password_new']);
 
-            /* $truefalse = GetPost($loginurl, array( "Username" => $_POST['user_name'], 
-                                                    "Email" => $_POST['user_email'], 
-                                                    "Telephone" => $_POST['user_phone'], 
-                                                    "Password" => $_POST['user_password_new'] )); */
+            $client = new SoapClient('http://54.69.0.233:8080/iGoWeb/HappyPathClientService?wsdl', 
+                array("trace" => 1, "exception" => 0, 'features' => SOAP_SINGLE_ELEMENT_ARRAYS) );
 
-            $requestParams = array( 'login', $_POST['user_name'], $_POST['user_email'], $_POST['user_phone'], $_POST['user_password_new']);
+            $response = $client->getYelpData($requestParams); // Crashes the moment we do this.
+            
+            print_r($requestParams);
+            $truefalse = $response->return;
 
-            $client = new SoapClient($serviceWSDLurl);
-            $response = $client->getYelpData($requestParams);
-
-            $truefalse = print_r($response);
             
             if( $truefalse == "" ) {
                 $this->messages[] = "Your account has been created successfully. You can now log in.";
             } else {
-                $this->errors[] = $truefalse;
+                $this->errors[] = "yeeeeeeeees?";
             } 
         } else {
             $this->errors[] = "An unknown error occurred.";
