@@ -80,6 +80,7 @@ class Registration
             $response = $client->getYelpData($requestParams);
 
             $truefalse = print_r($response);
+            
             if( $truefalse == "" ) {
                 $this->messages[] = "Your account has been created successfully. You can now log in.";
             } else {

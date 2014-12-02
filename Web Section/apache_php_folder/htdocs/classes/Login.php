@@ -1,7 +1,6 @@
 <?php
 
 include 'Post.php';
-
 /**
  * Class login
  * handles the user's login and logout process
@@ -10,7 +9,7 @@ class Login
 {
 	private $loginurl = '/Login_Auth' ;
     private $serviceurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?Login';
-    private $serviceWSDLurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?WSDL';
+    private $serviceWSDLurl = 'http://54.69.0.233:8080/iGoWeb/HappyPathClientService?wsdl';
     /**
      * @var array Collection of error messages
      */
@@ -51,19 +50,20 @@ class Login
         } elseif (empty($_POST['user_password'])) {
             $this->errors[] = "Password field was empty.";
         } elseif (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
+            $truefalse = "0";
+            $requestParams = array( 'arg0'=>'login', 'arg1'=>$_POST['user_name'], 'arg2'=>$_POST['user_password'], 'arg3'=>"0");
 
-            $requestParams = array( 'login', $_POST['user_name'], $_POST['user_password'], "0");
+            $client = new SoapClient('http://54.69.0.233:8080/iGoWeb/HappyPathClientService?wsdl', 
+                array("trace" => 1, "exception" => 0, 'features' => SOAP_SINGLE_ELEMENT_ARRAYS) );
 
-            $client = new SoapClient($serviceWSDLurl);
-            $response = $client->getYelpData($requestParams);
-
-            $truefalse = print_r($response);
+            $response = $client->getYelpData($requestParams); // Crashes the moment we do this.
+            
+            $truefalse = $response->return;
 
             if($truefalse == "1") {
             	// write user data into PHP SESSION (a file on your server)
                 $_SESSION['user_name'] = $_POST['user_name'];
                 $_SESSION['user_login_status'] = 1;
-                echo "FALSE";
             } else {
                 // $this->errors[] = '<code> Returned: >'.$truefalse.'< with error: '.$err.'</code>';
                 $this->errors[] = '<font color="white">Wrong username or password. Try again.</font>';
