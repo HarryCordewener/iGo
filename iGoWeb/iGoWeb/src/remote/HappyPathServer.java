@@ -48,7 +48,7 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 		//mySQL connection variables
 		String mySQLurl;
 		String mySQLusername="root";
-		String mySQLpass="cs411";
+		String mySQLpass="cs441";
 		String mongoHost;
 		int mongoPort;
 		
@@ -306,7 +306,6 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 			closeResults(stmt, rs);
 			restaurantsJSON.append("]}");
 			closeConnection(con);
-	
 			return restaurantsJSON.toString();
 		}
 		else{
@@ -329,7 +328,7 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 		}
 		java.sql.Connection con;
 		con = DriverManager.getConnection
-				("jdbc:mysql://localhost/igo", "root", "loki");
+				("jdbc:mysql://localhost/igo", "root", "cs441");
 		return con;
 	}
 

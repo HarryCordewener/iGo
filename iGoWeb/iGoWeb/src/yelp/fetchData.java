@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 public class fetchData {
 
 	public static String queryLocation(JSONObject obj) {
-		String DB_URL = "jdbc:mysql://localhost:3306/test";
+		String DB_URL = "jdbc:mysql://localhost:3306/igo";
 		String USER = "root";
 		String PASS = "cs441";
 		String queryitem = ((JSONObject) obj.get("location")).get("city")
@@ -71,7 +71,7 @@ public class fetchData {
 
 		JSONObject s = new JSONObject(obj);
 		// String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-		String DB_URL = "jdbc:mysql://localhost:3306/test";
+		String DB_URL = "jdbc:mysql://localhost:3306/igo";
 		String USER = "root";
 		String PASS = "cs441";
 

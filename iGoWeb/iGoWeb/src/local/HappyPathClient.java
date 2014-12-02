@@ -20,10 +20,9 @@ import remote.happyPathInterface;
 
 @WebService
 public class HappyPathClient {
-	
 	@SuppressWarnings("resource")
 	static Scanner input = new Scanner(System.in);
-	
+
 	public static void main(String[] args) throws RemoteException {
 
 		String host = (args.length < 1) ? null : args[0];
@@ -288,6 +287,7 @@ public class HappyPathClient {
 			String arg3, String arg4, String arg5) throws IOException, JSONException {
 		String data = "";
 		Registry registry = LocateRegistry.getRegistry(12345);
+		boolean nosqldb = false;
 		try {
 			happyPathInterface stub = (happyPathInterface) registry
 					.lookup("rmiServer");
@@ -305,7 +305,7 @@ public class HappyPathClient {
 				String user = arg1;
 				String pass = arg2;
 				//boolean nosql = Boolean.parseBoolean(arg3);
-				int intData = stub.validateLogin(user, pass, true);
+				int intData = stub.validateLogin(user, pass, nosqldb);
 				data = data + intData;
 				System.out.println("out of login");
 				break;
@@ -316,7 +316,7 @@ public class HappyPathClient {
 				String mobile = arg3;
 				String pwd = arg4;
 				//boolean nosql = Boolean.parseBoolean(arg5);
-				stub.addAccount(name, pwd, email, mobile, true);
+				stub.addAccount(name, pwd, email, mobile, nosqldb);
 				data = "";
 				System.out.println("out of addAccount");
 				break;
@@ -324,18 +324,18 @@ public class HappyPathClient {
 				String city = arg1;
 				String state = arg2;
 				//boolean nosql = Boolean.parseBoolean(arg3);
-				int locationId = stub.setLocation(city, state, true);
+				int locationId = stub.setLocation(city, state, nosqldb);
 				data = "" + locationId;
 				break;
 			case "seeRestaurants" :
 				int locationid = Integer.parseInt(arg1);
 				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeRestauraunts(locationid, true);
+				data = stub.seeRestauraunts(locationid, nosqldb);
 				break;
 			case "seeHospitals" :
 				locationid = Integer.parseInt(arg1);
 				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeHospitals(locationid, true);
+				data = stub.seeHospitals(locationid, nosqldb);
 				break;
 			default:
 				System.out
@@ -355,6 +355,7 @@ public class HappyPathClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		return data;
 	}
