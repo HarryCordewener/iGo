@@ -63,7 +63,7 @@ class Login
             
             $truefalse = $response->return;
 
-            if($truefalse == "1") {
+            if($truefalse != "0") {
             	// write user data into PHP SESSION (a file on your server)
                 $_SESSION['user_name'] = $_POST['user_name'];
                 $_SESSION['user_login_status'] = 1;
