@@ -23,10 +23,7 @@ import org.json.JSONException;
 
 import yelp.Yelp;
 
-/*
- * ASSUMPTIONS:
- * 
- */
+
 
 @WebService
 @SuppressWarnings("serial")
