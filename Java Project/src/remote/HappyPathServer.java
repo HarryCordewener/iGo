@@ -86,6 +86,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 		System.out.println("Rmi connected");
 
 	}
+	
+	//Create an instance for static server
 
 	public static HappyPathServer createServer() {
 		try {
@@ -100,6 +102,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 
 	}
 
+	//Create the RMI connection on the local host
 	public static void connectRMI(int serverPort) {
 		Registry registry;
 		String address = null;
@@ -209,7 +212,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 
 	/*
 	 * setLocation: This method is used to lookup a location id in our database
-	 * and return to the cleint (non-Javadoc)
+	 * and return to the client (non-Javadoc)
 	 * 
 	 * @see remote.happyPathInterface#setLocation(java.lang.String,
 	 * java.lang.String, boolean)
@@ -444,7 +447,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 
 	/*
 	 * displayFriendMenu: This method displays users in our database and their
-	 * ids for the client to add friends (non-Javadoc)
+	 * ids for the client to add friends (non-Javadoc) (Unimplemented by server/client)
 	 * 
 	 * @see remote.happyPathInterface#displayFriendMenu(int)
 	 */
@@ -526,7 +529,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 	@Override
 	public void Logout(int userid) throws RemoteException,
 			ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -624,6 +627,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 		}
 			
 	}
+	
+	/*This method queries the bar tables and returns a formatted JSON string to the client*/
 
 	@Override
 	public String seeBars(int locationid, boolean nosql)
@@ -667,6 +672,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 		}
 	}
 
+	/*This method queries the hotels tables and returns a formatted JSON string to the client*/
+
 	@Override
 	public String seeHotels(int locationid, boolean nosql)
 			throws RemoteException, ClassNotFoundException, SQLException {
@@ -708,6 +715,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 			return HotelJSON;
 		}
 	}
+
+	/*This method queries the theaters tables and returns a formatted JSON string to the client*/
 
 	@Override
 	public String seeTheaters(int locationid, boolean nosql)
@@ -751,6 +760,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 		}
 	}
 
+	/*This method queries the police station table and returns a formatted JSON string to the client*/
+
 	@Override
 	public String seePolice(int locationid, boolean nosql)
 			throws RemoteException, ClassNotFoundException, SQLException {
@@ -792,6 +803,9 @@ public class HappyPathServer extends UnicastRemoteObject implements
 		}
 
 	}
+	
+	/*This method queries the school table and returns a formatted JSON string to the client*/
+
 
 	@Override
 	public String seeSchool(int locationid, boolean nosql)
@@ -833,6 +847,9 @@ public class HappyPathServer extends UnicastRemoteObject implements
 			return sJSON;
 		}
 	}
+	
+	/*This method queries the store table and returns a formatted JSON string to the client*/
+
 
 	@Override
 	public String seeStore(int locationid, boolean nosql)

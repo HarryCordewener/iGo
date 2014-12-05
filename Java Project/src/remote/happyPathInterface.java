@@ -17,24 +17,33 @@ import org.json.JSONException;
  */
 public interface happyPathInterface extends Remote{
 	
+	//Used for yelp data
 	String getData(String Term,String Location) throws  IOException, JSONException;
 
+	//Used only to test RMI functionality
 	void recieveMessage(String x)throws RemoteException;//test method
 	
+	//Adds a user account to the database
 	void addAccount(String username, String password, String email, String mobileNumber, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
+	
+	//Unimplemented friend system methods
 	void displayFriendMenu(int db, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;//displays all users in database
 	void displayMyFriends (int userid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//displays user's friends
 	void addFriend(int userid, int friendid, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException; //Must add friend and apply to BOTH databases!
 	
+	//Validates user login for a client and returns the user id
 	int validateLogin (String user, String pass, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//checks username and password 
 	//int getMongoUserID(String user);
 	//Validate login only verifies using SQL
 	//if validateLogin returns 0, login was unsuccessuful, do not show menu,
 	//otherwise validatelogin will return the userID (int) which can be used to add other friends
 	
+	//Allows user to set locaation based on city and state
 	int setLocation (String city, String state, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//input a city and state to lookup a location in the database
 	
+	//Unimplemented email method
 	int getUsernamefromEmail(String email, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;
+	
 	
 	String seeRestauraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	//will return a list of restraunts with all attributes in JSON
