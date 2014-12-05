@@ -37,22 +37,22 @@ public interface happyPathInterface extends Remote{
 	int getUsernamefromEmail(String email, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;
 	
 	String seeRestauraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of restraunts with all attributes in JSON
+	//will return a list of restraunts with all attributes in JSON
 	
 	String seeHospitals(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of hospitals with all attributes in JSON
+	//will return a list of hospitals with all attributes in JSON
 	
 	String seeAirports(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of airportss with all attributes in JSON
+	//will return a list of airports with all attributes in JSON
 	
 	String seeBanks(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of banks with all attributes in JSON
+	//will return a list of banks with all attributes in JSON
 	
 	String seeBars(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of barss with all attributes in JSON
+	//will return a list of bars with all attributes in JSON
 	
 	String seeHotels(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
-	//will return a lsit of hotels with all attributes in JSON
+	//will return a list of hotels with all attributes in JSON
 	
 	String seeTheaters(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;
 	

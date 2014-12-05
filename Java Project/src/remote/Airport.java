@@ -10,9 +10,6 @@ public class Airport extends locationSuper {
 		// TODO Auto-generated constructor stub
 	}
 
-
-	
-
 		public int getAirportID() {
 		return airportID;
 	}
@@ -24,10 +21,7 @@ public class Airport extends locationSuper {
 		this.airportID = airportID;
 	}
 
-
-
-
-		public String toString(){
+	public String toString(){
 			return " {\"airportid\":" + airportID +",\"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":" + name + 
 					 "}";
 		}

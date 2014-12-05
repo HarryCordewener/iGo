@@ -37,10 +37,8 @@ public class HappyPathServer extends UnicastRemoteObject implements
 
 	// static Connection conn;
 
-	public HappyPathServer() throws RemoteException {
-
-	}
-
+	public HappyPathServer() throws RemoteException {}
+	
 	public static void main(String args[]) {
 		Registry registry;
 
@@ -694,7 +692,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 				String name = rs.getString("name");
 				String type = rs.getString("type");
 				String gps = rs.getString("gps");
-				Hotel temp = new Hotel(gps, name, locationid, restid);
+				Hotel temp = new Hotel(gps, name, locationid, restid, type);
 				System.out.println(temp.toString());
 				restaurantsJSON.append(temp.toString());
 
@@ -736,7 +734,7 @@ public class HappyPathServer extends UnicastRemoteObject implements
 				String name = rs.getString("name");
 				String type = rs.getString("type");
 				String gps = rs.getString("gps");
-				Hotel temp = new Hotel(gps, name, locationid, restid);
+				Hotel temp = new Hotel(gps, name, locationid, restid, type);
 				System.out.println(temp.toString2());
 				theatersJSON.append(temp.toString2());
 
