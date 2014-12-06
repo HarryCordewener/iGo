@@ -31,8 +31,8 @@ public class Restaurant extends locationSuper{
 
 
 	public String toString(){
-		return "{\"restaurantid\":" + restaurantID +  ", \"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":"
-				+ name + ", \"type\":" + restaurantType +  "}";
+		return "{\"restaurantid\":" + restaurantID +  ", \"gps\":\"" + coordinates + "\", \"locationid\":" + locID + ", \"name\":\""
+				+ name + "\", \"type\":\"" + restaurantType +  "\"}";
 	}
 
 

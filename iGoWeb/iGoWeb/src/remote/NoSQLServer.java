@@ -2,6 +2,9 @@ package remote;
 
 import java.util.ArrayList;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -168,7 +171,7 @@ public class NoSQLServer {
 	
 	public static String seeRestaurants(int locationid) {
 		StringBuilder restaurantsJSON = new StringBuilder(1000);
-		restaurantsJSON.append("{ Restaurants:[");
+		restaurantsJSON.append("{ \"restaurants\":[");
 		if(connectNoSQL()){
 			String query = "{\"locationid\":"+locationid+"},{_id:0}";
 			
@@ -181,11 +184,25 @@ public class NoSQLServer {
 				   while(cursor.hasNext()) {
 					   
 					   DBObject obj = cursor.next();
-					   int restid  = (int)Float.parseFloat((obj.get("restaurantid").toString()));
+					   //int restid  = (int)Float.parseFloat((obj.get("restaurantid").toString()));
+					   int restid  = (Integer)obj.get("restaurantid");
 						String name = obj.get("name").toString();
 						String type = obj.get("type").toString();
-						String gps = obj.get("gps").toString();
-						Restaurant temp = new Restaurant(gps, name, locationid, restid, type);
+						String gpscoor;
+
+						try {
+							/*location = (JSONObject) (obj.get("location"));
+							gpscoor = ((JSONObject) location.get("coordinate")).get(
+									"latitude").toString()
+									+ ","
+									+ ((JSONObject) location.get("coordinate")).get(
+											"longitude").toString();*/
+							gpscoor = obj.get("latitude").toString() + ","+ obj.get("longitude").toString();
+						} catch (Exception e) {
+							gpscoor = "NA";
+						}
+						
+						Restaurant temp = new Restaurant(gpscoor, name, locationid, restid, type);
 						System.out.println(temp.toString());
 						restaurantsJSON.append(temp.toString());
 			
@@ -207,25 +224,41 @@ public class NoSQLServer {
 	public static String seeHospitals(int locationid) {
 
 		if(connectNoSQL()){
-			StringBuilder hospitalsJSON= new StringBuilder(10000);
-			String query = "{\"locationid\":\""+locationid+"\"},{_id:0}";
-			
+			String query = "{\"locationid\":"+locationid+"},{_id:0}";
 			DBObject queryObj = (DBObject) JSON.parse(query);
 			DBCollection collection = db.getCollection("hospitals");
 			DBCursor cursor = collection.find(queryObj);
 			//STEP 4: Execute a query
+			JSONObject hospital=new JSONObject();
+			JSONArray hospitals=new JSONArray();
 			System.out.println("Creating statement - querying hospitals...");
 			try {
 				   while(cursor.hasNext()) {
-					   hospitalsJSON.append(cursor.next().toString());
-					   hospitalsJSON.append(",");
+					   DBObject obj = cursor.next();
+					   String hospitalid = obj.get("id").toString();
+					   String name = obj.get("name").toString();
+					   String type = obj.get("type").toString();
+					   String contactnumber = obj.get("phone").toString();
+					   String gpscoor;
+					   try {
+						   gpscoor = obj.get("latitude").toString() + ","+ obj.get("longitude").toString();
+						} catch (Exception e) {
+							gpscoor = "NA";
+						}
+					
+					hospital.put("hospitalid", hospitalid);
+					hospital.put("gps",gpscoor);
+					hospital.put("locationid",locationid);
+					hospital.put("name",name);
+					hospital.put("type",type);
+					hospital.put("contactnumber",contactnumber);
+					hospitals.add(hospital);
 				   }
 				} finally {
-					hospitalsJSON.append("]}");
-				   cursor.close();
+					cursor.close();
 				}
 				closeConnectionNoSQL();
-				return hospitalsJSON.toString();
+				return hospitals.toString();
 		}
 		else{
 			return "";
@@ -306,8 +339,8 @@ public class NoSQLServer {
 			//System.out.println("Now creating users...");
 			generateUsers();
 			generateLocations();
-			generateRestaurants();
-			generateHospitals();
+			//generateRestaurants();
+			//generateHospitals();
 		}
 		return;
 	}

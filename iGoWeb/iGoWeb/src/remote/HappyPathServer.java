@@ -9,15 +9,22 @@
  */
 package remote;
 
-import java.rmi.*;
-import java.rmi.registry.*;
-import java.rmi.server.*;
 import java.io.IOException;
-import java.net.*;
-import java.sql.*;
-
+import java.net.InetAddress;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
 import org.json.JSONException;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 
 import yelp.Yelp;
 /*
@@ -266,7 +273,34 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 		}
 		return 0;
 	}
+	
+	
+// get Location Names in an ArrayList
+	
+	public String getLocation(boolean nosql) throws RemoteException, ClassNotFoundException, SQLException{
 
+			Connection con = connectSQL();
+			Statement stmt = con.createStatement ();
+			String query = "SELECT * FROM locations;";
+
+			//STEP 4: Execute a query
+			System.out.println("Creating statement- lookin up city...");
+			ResultSet rs = queryMySQL(stmt, query);
+			
+			JSONArray locations = new JSONArray();
+			while(rs.next()){
+				//Retrieve the location
+				JSONObject locationObj=new JSONObject();
+				String LocationName  = rs.getString("LocationName");
+				locationObj.put("locationname",LocationName);
+				locations.add(locationObj);
+			}
+			closeResults(stmt, rs);
+			return locations.toString();
+	}
+
+//get Location code ends here....	
+	
 	/*
 	 * seeRestraunts:
 	 * This method returns a JSON list of restaurants in the selected location
@@ -283,11 +317,11 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 	
 	
 			StringBuilder restaurantsJSON = new StringBuilder(1000);
-			restaurantsJSON.append("{ Restaurants:[");
+			restaurantsJSON.append("{ \"restaurants\":[");
 			String query = "SELECT * FROM restaurants where locationid = " + locationid + " limit 100;";
 	
 			//STEP 4: Execute a query
-			System.out.println("Creating statement- querying resteraunts...");
+			System.out.println("Creating statement- querying...");
 			//stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
 	
@@ -480,7 +514,7 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 			Statement stmt = con.createStatement ();
 	
 			StringBuilder hospitalsJSON= new StringBuilder(10000);
-			hospitalsJSON.append("{Hospitals: [");
+			hospitalsJSON.append("{ \"hospitals\": [");
 			String query = "SELECT * FROM hospitals where locationid = " + locationid + ";";
 	
 			//STEP 4: Execute a query
@@ -508,6 +542,7 @@ public class HappyPathServer extends UnicastRemoteObject implements happyPathInt
 		else{
 			//mongodb seeRestaurants called here
 			String hospitalsJSON = NoSQLServer.seeHospitals(locationid);
+			hospitalsJSON = "{ \"hospitals\":"+hospitalsJSON+"}";
 			return hospitalsJSON;
 		}
 		

@@ -32,6 +32,8 @@ public interface happyPathInterface extends Remote{
 	
 	int setLocation (String city, String state, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;//input a city and state to lookup a location in the database
 	
+	String getLocation (boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;
+	
 	int getUsernamefromEmail(String email, boolean nosql) throws RemoteException, ClassNotFoundException, SQLException;
 	
 	String seeRestauraunts(int locationid, boolean nosql)throws RemoteException, ClassNotFoundException, SQLException;

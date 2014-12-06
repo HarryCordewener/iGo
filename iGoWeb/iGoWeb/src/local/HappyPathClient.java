@@ -278,21 +278,22 @@ public class HappyPathClient {
 	}
 
 	/*
+	 * 
 	 *  WebService - Lokesh, Chetana
 	 *  
-	 *  Currently working with nosql
 	 */
 	@WebMethod
 	public String getYelpData(String methodName, String arg1, String arg2,
 			String arg3, String arg4, String arg5) throws IOException, JSONException {
 		String data = "";
 		Registry registry = LocateRegistry.getRegistry(12345);
-		boolean nosqldb = false;
+		//boolean nosqldb = false;
 		try {
 			happyPathInterface stub = (happyPathInterface) registry
 					.lookup("rmiServer");
 			switch (methodName) {
 			case "getYelpData":
+				System.out.println("inside: "+methodName+","+arg1+","+arg2+","+arg3+","+arg4);
 				String Term = arg1;
 				System.out.println("Term is : " + Term);
 				String Location = arg2;
@@ -301,45 +302,53 @@ public class HappyPathClient {
 				break;
 			
 			case "login":
-				System.out.println("inside login");
+				System.out.println("inside: "+methodName+","+arg1+","+arg2+","+arg3);
 				String user = arg1;
 				String pass = arg2;
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				int intData = stub.validateLogin(user, pass, nosqldb);
+				boolean nosql = Boolean.parseBoolean(arg3);
+				int intData = stub.validateLogin(user, pass, nosql);
 				data = data + intData;
 				System.out.println("out of login");
 				break;
 			case "addAccount" :
-				System.out.println("inside addAccount");
+				System.out.println("inside: "+methodName+","+arg1+","+arg2+","+arg3+","+arg4+","+arg5);
 				String name = arg1;
 				String email = arg2;
 				String mobile = arg3;
 				String pwd = arg4;
-				//boolean nosql = Boolean.parseBoolean(arg5);
-				stub.addAccount(name, pwd, email, mobile, nosqldb);
+				nosql = Boolean.parseBoolean(arg5);
+				stub.addAccount(name, pwd, email, mobile, nosql);
 				data = "";
 				System.out.println("out of addAccount");
 				break;
 			case "setLocation" :
+				System.out.println("inside: "+methodName+","+arg1+","+arg2+","+arg3);
 				String city = arg1;
 				String state = arg2;
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				int locationId = stub.setLocation(city, state, nosqldb);
+				nosql = Boolean.parseBoolean(arg3);
+				int locationId = stub.setLocation(city, state, nosql);
 				data = "" + locationId;
 				break;
 			case "seeRestaurants" :
+				System.out.println("inside: "+methodName+","+arg1+","+arg2);
 				int locationid = Integer.parseInt(arg1);
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeRestauraunts(locationid, nosqldb);
+				nosql = Boolean.parseBoolean(arg2);
+				data = stub.seeRestauraunts(locationid, nosql);
 				break;
 			case "seeHospitals" :
+				System.out.println("inside: "+methodName+","+arg1+","+arg2);
 				locationid = Integer.parseInt(arg1);
-				//boolean nosql = Boolean.parseBoolean(arg3);
-				data = stub.seeHospitals(locationid, nosqldb);
+				nosql = Boolean.parseBoolean(arg2);
+				data = stub.seeHospitals(locationid, nosql);
 				break;
+			case "getLocations" :
+				System.out.println("inside: "+methodName+","+arg1);
+				nosql = Boolean.parseBoolean(arg1);
+				data = stub.getLocation(nosql);
+				break;
+			
 			default:
-				System.out
-						.println("Could not find such method - " + methodName);
+				System.out.println("Could not find such method - " + methodName);
 				break;
 			}
 		}
@@ -362,8 +371,6 @@ public class HappyPathClient {
 	
 	/*
 	 *  WebService - Lokesh,  Chetana
-	 *  
-	 *  Currently working with nosql
 	 */
 	@WebMethod
 	public String sayHello(){

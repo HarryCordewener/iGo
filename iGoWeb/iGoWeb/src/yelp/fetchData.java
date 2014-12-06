@@ -124,6 +124,7 @@ public class fetchData {
 					+ active
 					+ "','"
 					+ state + "')";
+			
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
 			System.out.println(" SUCCESS!\n");
@@ -149,6 +150,5 @@ public class fetchData {
 				se.printStackTrace();
 			}
 		}
-
 	}
 }
